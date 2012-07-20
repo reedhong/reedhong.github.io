@@ -14,31 +14,32 @@ Ogre有良好的插件系统，能够方便地系统更换或添加一些功能�
 ![ogre plugin](/images/blog/ogre-plugin.jpg)  
 Plugin本身为一抽象类，定义了作为一个Plugin应该具备的一些基本接口
 
->class Plugin
+<pre class="prettyprint lang-cpp">  
+class Plugin
 {  
 public:  
-Plugin(){}  
-~Plugin(){}  
-virtual const String& getName() const = 0;   
-virtual void install() = 0;  
-virtual void initialise() = 0;  
-virtual void shutdown() = 0;  
-virtual void uninstall() = 0;  `  
+	Plugin(){}  
+	~Plugin(){}  
+	virtual const String& getName() const = 0;   
+	virtual void install() = 0;  
+	virtual void initialise() = 0;  
+	virtual void shutdown() = 0;  
+	virtual void uninstall() = 0;  `  
 };  
-
+<pre class="prettyprint lang-cpp">  
 所有继承Plugin的类实现这些接口。我们来看GLPlugin一些接口的实现
 <pre class="prettyprint lang-cpp">  
 void GLPlugin::install()  
 {
-  mRenderSystem = new GLRenderSystem();   
-  // 加到Root的renders中  
-  Root::getSingleton().addRenderSystem(mRenderSystem);  
+	mRenderSystem = new GLRenderSystem();   
+	// 加到Root的renders中  
+	Root::getSingleton().addRenderSystem(mRenderSystem);  
 }
 
 void GLPlugin::uninstall()
 {
-  delete mRenderSystem;
-  mRenderSystem = 0;
+	delete mRenderSystem;
+	mRenderSystem = 0;
 }
 </pre>
 ####2. 再看动态库的管理，重点看类:DynLib和DynLibManager####
@@ -49,6 +50,7 @@ DynLibManager把系统涉及到的所有DnyLib，通过一个Map管理起来。
   
 ####3. Root涉及插件加载的接口**####
 >// 通过dll，加载插件，此处其实是加载动态库，这个地方的命名有些问题。  
+<pre class="prettyprint lang-cpp">  
 void loadPlugin(const String& pluginName)  
 {
   DynLib* lib = DynLibManager::getSingleton().load( pluginName );  
@@ -92,30 +94,33 @@ void uninstallPlugin(Plugin* plugin);
   plugin->uninstall();  
   mPlugins.erase(i);  
 }  
-
+</pre>
 
 ####4. 然后看动态库的定义文件####
 挑选RenderSystems/GL/src/OgreGLEngineDll.cpp文件分析：
->    extern "C" void _OgreGLExport dllStartPlugin(void) throw()  
-    {  
-          plugin = new GLPlugin();  
-          Root::getSingleton().installPlugin(plugin);
 
-    }
+<pre class="prettyprint lang-cpp"> 
+extern "C" void _OgreGLExport dllStartPlugin(void) throw()  
+{  
+  plugin = new GLPlugin();  
+  Root::getSingleton().installPlugin(plugin);
 
-    extern "C" void _OgreGLExport dllStopPlugin(void)
-    {
-          Root::getSingleton().uninstallPlugin(plugin);
-          delete plugin;
-    }
+}
 
+extern "C" void _OgreGLExport dllStopPlugin(void)
+{
+  Root::getSingleton().uninstallPlugin(plugin);
+  delete plugin;
+}
 
+</pre>
 可以看出，也就是动态创建插件，然后调用Root的接口安装和卸载相应的接口
 根据上面的分析，我们在看动态库加载和静态库加载的全过程：
 ####1. 动态库加载####
 主要是通过读入plugins.cfg的配置文件，依次加载进来
 
->Root::Root()
+<pre class="prettyprint lang-cpp"> 
+Root::Root()
 {
  ...
  // Load plugins
@@ -132,18 +137,20 @@ if (!pluginFileName.empty())
   }  
  ...
 }
+</pre>
 
 ####2.静态库的加载####
 在编译前需要修改编译参数，编译参数的修改在Ogre\include\OgreBuildSettings.h中，将#define OGRE_STATIC_LIB 打开。然后手动通过Root的installPlugin接口加载。我们可以看源码Samples\Browser\Android\project\jni\ogrewrapper.cpp中的代码
->     // Create a root object
-          g_root = OGRE_NEW Ogre::Root("", "", "");
-          
-          // Register the ES2 plugin
-          g_gles2Plugin = OGRE_NEW Ogre::GLES2Plugin();
-          Ogre::Root::getSingleton().installPlugin(g_gles2Plugin);
-          
-          // Register particle plugin
-          g_pfxPlugin = OGRE_NEW Ogre::ParticleFXPlugin();
-          Ogre::Root::getSingleton().installPlugin(g_pfxPlugin);
+<pre class="prettyprint lang-cpp">     
+ // Create a root object
+	g_root = OGRE_NEW Ogre::Root("", "", "");
 
+	// Register the ES2 plugin
+	g_gles2Plugin = OGRE_NEW Ogre::GLES2Plugin();
+	Ogre::Root::getSingleton().installPlugin(g_gles2Plugin);
+
+	// Register particle plugin
+	g_pfxPlugin = OGRE_NEW Ogre::ParticleFXPlugin();
+	Ogre::Root::getSingleton().installPlugin(g_pfxPlugin);
+</pre>
 通过上述方法即可。
