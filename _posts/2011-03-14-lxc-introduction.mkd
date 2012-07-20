@@ -1,6 +1,6 @@
 ---
 title: Libvirt介绍
-category: lxc
+category: LXC
 tags:
  - lxc
  - 虚拟化
