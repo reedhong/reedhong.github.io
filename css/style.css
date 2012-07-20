@@ -36,6 +36,7 @@ ul {
     font-weight: bold;
     overflow: auto;
     padding: 24px;
+	margin: 0px;
 }
 #header a:visited, #header a:active, #header a:link {
     color: #000000;
@@ -47,10 +48,8 @@ ul {
     font-family: "Courier New",Verdana,monospace;
     font-size: 10pt;
     font-weight: normal;
-    margin: 0;
+    margin: 0px;
     position: absolute;
-    right: 35px;
-    top: 30px;
 }
 
 #header h1 { margin-bottom:0; }
@@ -66,7 +65,7 @@ ul {
 
 #header-menu {
     clear: both;
-    margin: 0 auto;
+    margin-bottom: 10px;
     padding: 0 0 0;
     width: 100%;
 }
@@ -74,7 +73,7 @@ ul {
     background: none repeat scroll 0 0 #F0F0F0;
     list-style-type: none;
     margin: 0;
-    padding: 3px 40px;
+    padding: 3px 16px;
 }
 #header-menu ul li {
     display: inline;
