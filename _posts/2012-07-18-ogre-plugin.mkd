@@ -26,7 +26,7 @@ public:
 	virtual void shutdown() = 0;  
 	virtual void uninstall() = 0;  `  
 };  
-<pre class="prettyprint lang-cpp">  
+</pre>
 所有继承Plugin的类实现这些接口。我们来看GLPlugin一些接口的实现
 <pre class="prettyprint lang-cpp">  
 void GLPlugin::install()  
