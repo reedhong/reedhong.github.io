@@ -26,20 +26,21 @@ virtual void shutdown() = 0;
 virtual void uninstall() = 0;  `  
 };  
 
-所有继承Plugin的类实现这些接口。我们来看GLPlugin一些接口的实现  
-> void GLPlugin::install()  
-     {
-          mRenderSystem = new GLRenderSystem();   
-          // 加到Root的renders中  
-          Root::getSingleton().addRenderSystem(mRenderSystem);  
-     }
+所有继承Plugin的类实现这些接口。我们来看GLPlugin一些接口的实现
+<pre class="prettyprint lang-cpp">  
+void GLPlugin::install()  
+{
+  mRenderSystem = new GLRenderSystem();   
+  // 加到Root的renders中  
+  Root::getSingleton().addRenderSystem(mRenderSystem);  
+}
 
-     void GLPlugin::uninstall()
-     {
-          delete mRenderSystem;
-          mRenderSystem = 0;
-     }
-
+void GLPlugin::uninstall()
+{
+  delete mRenderSystem;
+  mRenderSystem = 0;
+}
+</pre>
 ####2. 再看动态库的管理，重点看类:DynLib和DynLibManager####
 DynLib封装了不同平台上动态库的操作，提供一致性的接口。可以理解为一种Adapter的设计模式。重点可以看其load和unload接口的实现，这里就不错具体的分析。  
 DynLibManager把系统涉及到的所有DnyLib，通过一个Map管理起来。  

@@ -39,7 +39,6 @@ table {
 }
 code, pre {
 	display: block;
-	color: #FFF;
 	font-size: 13px;
 	line-height: 1.6em;
 	font-family: Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace !important;
@@ -49,7 +48,7 @@ code, pre {
 pre {
 	width: 660px;
 	padding: 0;
-	background: #002B36;
+	background: #F0F0F0;
 }
 code {
 	padding: .5em 1em;
