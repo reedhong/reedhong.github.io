@@ -5,11 +5,11 @@ layout: nil
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-<title>小洪</title>
-<link href="http://reedhong.github.com/atom.xml" rel="self"/>
-<link href="http://reedhong.github.com/"/>
+<title>{{ site.title }}</title>
+<link href="http://{{ site.domain }}/atom.xml" rel="self"/>
+<link href="http://{{ site.domain }}/"/>
 <updated>{{ site.time | date_to_xmlschema }}</updated>
-<id>http://reedhong.github.com/</id>
+<id>http://{{ site.domain }}/</id>
 <author>
     <name>reedhong</name>
     <email>fishwarter@gmail.com</email>
@@ -20,7 +20,7 @@ layout: nil
     <title>{{ post.title }}</title>
     <link href="http://reedhong.github.com{{ post.url }}"/>
     <updated>{{ post.date | date_to_xmlschema }}</updated>
-    <id>http://reedhong.github.com{{ post.id }}</id>
+    <id>http://{{ site.domain }}{{ post.id }}</id>
     <content type="html">{{ post.content | xml_escape }}</content>
 </entry>
 {% endfor %}
@@ -28,7 +28,7 @@ layout: nil
 <entry>
     <title>(已删除)</title>
     <updated>2011-08-27T00:00:00+08:00</updated>
-    <id>http://reedhong.github.com/blog/2011/08/27/make-github-as-blog-engine-supplement</id>
+    <id>http://{{ site.domain }}/blog/2011/08/27/make-github-as-blog-engine-supplement</id>
     <content type="html"></content>
 </entry>
 

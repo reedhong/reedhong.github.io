@@ -3,7 +3,7 @@
 	<head>
 		<title>{% if page.title %}{{ page.title | append: ' - ' }}{% endif %}{{ site.title }}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/noding" />
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.rss}}" />
 		<link rel="stylesheet" type="text/css" href="/css/drupal.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
@@ -11,7 +11,7 @@
 
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_setAccount', '{{ site.ga }}']);
 			_gaq.push(['_trackPageview']);
 			(function() {
 			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -89,21 +89,9 @@
 					</div>
 
 					<div class="block">
-						<h2 class="title">Twitter</h2>
-						
-						<div class="content">
-							<div class="item-list" id="tweets">
-							</div>
-							<div class="more-link">
-    <a href="https://twitter.com/ravenwang" class="twitter-follow-button" data-show-count="false" data-width="200px" data-align="right">follow @ravenwang</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="block">
 						<h2 class="title">Subscribe</h2>
 						<div class="content">
-							<a href="http://feeds.feedburner.com/ravenw" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+							<a href="http://feeds.feedburner.com/noding" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
 						</div>
 					</div>
 
@@ -125,11 +113,11 @@
 		</table>
 
 		<script type="text/javascript">
-			var disqus_shortname = 'reedhong';
+			var disqus_shortname = '{{ site.disqus_shortname }}';
 			(function () {
 				var s = document.createElement('script'); s.async = true;
 				s.type = 'text/javascript';
-				s.src = 'http://reedhong.disqus.com/count.js';
+				s.src = 'http://{{ site.disqus_shortname }}.disqus.com/count.js';
 				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
 			 }());
 		</script>

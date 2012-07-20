@@ -1,5 +1,9 @@
-title: Indie 之路
-domain: ravenw.com
+title: 小洪
+domain: reedhong.github.com
+rss: http://feeds.feedburner.com/noding
+ga: UA-2922788-2
+disqus_shortname: reedhong
+comment: 
 markdown: rdiscount
 pygments: true
 regeneration: true
