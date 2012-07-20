@@ -1,0 +1,89 @@
+---
+title: 虚拟机测试框架  
+category: LXC
+tags:
+ - lxc
+ - vm
+ - performance
+layout: post
+---
+虚拟机的解决方案各有千秋，在技术选型上，就需要好好进行测试，在这里大致给出一个测试框架出来，希望对大家在技术选型的时候有所帮助
+
+# 1. 系统性能测试 #
+## 1.1 综合测试 ##
+采用UnixBench，具体参考http:// code.google.com/p/byte-unixbench/
+是一个系统基准测试工具，不是CPU、RAM或者磁盘基准测试工具。 结果不仅依靠您的硬件，还要依靠您的操作系统，库甚至编译器。主要测试参数如下：  
+Dhrystone  
+该测试用于衡量字符串操作性能，不涉及浮点运算。该测试由Reinhold Weicker在1984年开发，它很大程度上受到软硬件设计、编译器和连接器参数、代码优化、缓存和整型类型的影响。
+
+Whetstone
+该测试用于衡量浮点运算的效率和速度。测试由多个科学计算混合而成，其中的C程序包括sin、cons、sqrt、exp和log，以及整数和浮点数运算、数组操作、条件判断和过程调用，同时测试整数和浮点运算性能。
+
+Execl Throughput
+该测试用于衡量每秒钟调用execl()的次数。execl()是exec函数簇的一部分，它用一个新的进程映像替换当前的进程映像。它和许多其他类似的函数都用作execve()的前端。
+
+File Copy
+该测试用于衡量文件操作性能。它从文件中读取或写入不同大小的buffer，并且测试一定时间内（默认10秒）文件的读写和复制性能。
+
+Pipe Throughput
+该测试用于衡量管道吞吐性能。管道是进程间通信最简单的一种方式，管道吞吐量是一个进程写512bytes到管道并读取出来的次数。管道吞吐量测试并不对应真实的应用。
+
+Pipe-based Context Switching
+该测试用于衡量基于管道的上下文切换性能。两个进程通过一个管道传递一个自增整数，该测试类似一个真实的应用，测试程序创建一个子进程，它们之间通过管道通信。
+
+Process Creation
+该测试用于衡量fork()性能。在一定的时间内，一个进程可以创建并回收子进程的次数。子进程创建涉及内存分配和内存带宽。通常，该基准测试用于比较不同平台下的进程创建性能。
+
+Shell Scripts
+该测试用于衡量脚本运行性能。在一定时间内，一个进程可以创建一组1、2、4、8个并发shell脚本的次数，脚本中包含一组文件操作。
+
+System Call Overhead
+该测试用于衡量系统调用负载性能。测试进入和离开内核态的花销，由一组简单的重复系统调用getpid()构成。
+
+测试完成成后最初会给某个基准值相比，得出一个总的评分。
+
+## 1.2 CPU测试 ##
+直接使用time tar jxvf linux-2.6.32.11.tar.bz2，观察整个解包时间
+
+## 1.3 IO测试 ##
+1) 采用dd直接读写大文件  
+写：dd if=/dev/zero of=test bs=1M count=4000  
+读：dd of=/dev/zero if=test bs=1M count=4000  
+2) 采用iozone，对文件的各种读写进行全面测试。
+
+## 1.4 网络测试 ##
+采用测试工具：netperf。参考：www.netperf.org/netperf/  netperf可测试TCP和UDP吞吐已经应答效率。常用命令如下：
+TCP并发：netperf -H 192.168.254.138 -t TCP_STREAM -l 60  
+UDP并发：netperf -H 192.168.254.138 -t UDP_STREAM -l 60 -- -m 64  
+TCP应答：netperf -H 192.168.254.138 -t TCP_RR -l 60 -- -r 64,1024    
+UDP应答：netperf -H 192.168.254.138 -t UDP_RR -l 60 -- -r 64,1024  
+
+说明：由于我们测试系统是windows下基于VMware的虚拟机，所以，没法直接对比虚拟机的性能。所以，我们做系统测试偏重于测试性能的损耗。也就是在用虚拟机和不用虚拟机的情况下，同样的系统配置，各种性能的偏差是多少。
+
+
+
+# 2 隔离功能测试 #
+
+虚拟机的最大好处在隔离。虽然在同一个物理主机下，但不同虚拟机中的进程相互不会产生影响。
+## 2.1 内存隔离 ##
+测试方法：写一个内存分配程序，不断地吃掉内存。大致代码如下
+<pre class="prettyprint lang-c">
+    char *p = NULL;
+    while(1){
+        p = (char *)malloc(sizeof(char)*BLOCK_SIZE);
+        memset(p, 0, BLOCK_SIZE);
+        sleep(1);
+    }   
+</pre>
+观察进程是否挂掉。
+## 2.2 CPU隔离 ##
+测试方法：写一个死循环程序，放在VPS里面。观察CPU占用情况。
+## 2.3 DISK隔离 ##
+测试方法：dd一个超出大小的文件，观察是否报错
+
+
+
+# 3 隔离性能测试 #
+
+主要采取的方法：在同一物理主机上部署N台虚拟主机，然后在其中一台做不同的压力测试(),观察是否其他虚拟主机有影响。为了能够对影响程度有一个量化。我们可以具体在每台虚拟机上跑以一个应用程序，观察应用程序性能变化。  
+参考论文：[http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf](http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf "http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf")

@@ -1,0 +1,8 @@
+---
+title: OpenGL中的顶点 
+category: OpenGL
+tags:
+ - OpenGL
+ - Vertex
+layout: post
+---

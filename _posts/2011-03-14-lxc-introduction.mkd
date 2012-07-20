@@ -1,0 +1,56 @@
+---
+title: Libvirt介绍
+category: lxc
+tags:
+ - lxc
+ - 虚拟化
+layout: post
+---
+####1. 什么是libvirt？####  
+虚拟云实现的三部曲：虚拟化技术实现-->虚拟机管理-->集群资源管理(云管理)。各种不同的虚拟化技术都提供了基本的管理工具。比如，启动，停用，配置，连接控制台等。这样在构建云管理的时候就存在两个问题：  
+1) 如果采用混合虚拟技术，上层就需要对不同的虚拟化技术调用不同管理工具，很是麻烦。  
+2) 虚拟化技术发展很迅速，系统虚拟化和容器虚拟化均在发展和演化中。可能有新的虚拟化技术更加符合现在的应用场景，需要迁移过去。这样管理平台就需要大幅改动。使之适应这种变化。  
+为了适应变化，我们惯用的手段是分层，使之相互透明，在虚拟机和云管理中设置一个抽象管理层。libvirt就是扮演的这个角色。有了它，上面两个问题就迎刃而解。libvirt提供各种API，供上层来管理不同的虚拟机。
+
+####2. 支持虚拟机####
+目前支持的虚拟化技术包括：Xen,QEMU,KVM,LXC,OpenVZ, User Mode Linux, VirtualBox, VmWare ESX and GSX, VMware Workstation and Player。可以说是非常丰富，主流的虚拟化技术都包含了。
+
+####3. 语言绑定####
+ libvirt 库用 C （支持 C++）实现，且包含对 Python 的直接支持。不过它还支持大量语言绑定。目前已经对 Ruby、Java? 语言，Perl 和 OCaml 实施了绑定。在从 C# 调用 libvirt 方面我们已做了大量工作。libvirt 支持最流行的系统编程语言（C 和 C++）、多种脚本语言、甚至一种统一的函数型语言（Objective caml）。因此，不管您侧重何种语言，libvirt 都会提供一种路径来帮助您控制域。
+ 而且，提供不同语言的绑定，目前支持：c++, python, c#, php等。使用起来都非常方便。
+
+####4. 相关工具####
+ 另外，它还提供一些基本的基于命令行的管理工具，进行简单的资源管理。
+
+
+####5. 架构####
+下面两张图是libvirt的运行的两种模式：它分别支持本地管理和远程管理两种方式。针对不同的虚拟机设计一个驱动。便于用户管理。使用远程管理是，需要跟远程主机上的libvirtd通信。
+     
+
+
+     
+
+####6. API接口####
+
+libvirt提供了各种API的接口。大致可以分为五部分：
+虚拟机监控程序 
+连接 API: virConnectPtr 为给定虚拟机监控程序创建连接后会产生所有 libvirt 通信（例如，清单 6 中所示的 open 调用）。该连接为所有其他要使用的 API 提供路径。在 C API 中，该行为通过 virConnectOpen 调用（以及其他进行认证的调用）提供。这些函数的返回值是一个 virConnectPtr 对象，它代表到虚拟机监控程序的一个连接。该对象作为所有其他管理功能的基础，是对给定虚拟机监控程序进行并发 API 调用所必需的语句。
+域 API: virDomainPtr。 用于虚拟机管理。包括创建，启动，停用，迁移，动态修改配置等。      
+网络 API: 监控虚拟网络  
+存储卷 API: 管理存储设备  
+存储池 API: 管理存储文件系统  
+它们间的对应关系  
+     
+
+
+
+ 具体的文档说明可以见：[http://libvirt.org/guide/pdf/Application_Development_Guide.pdf](http://libvirt.org/guide/pdf/Application_Development_Guide.pdf)
+     
+ 由于各种虚拟机实现的差异,虚拟机对对不同的API支持是有差异的，具体可以见：
+[http://libvirt.org/hvsupport.html](http://libvirt.org/hvsupport.html)
+
+
+参考：
+
+[www.ibm.com/developerworks/cn/linux/l-libvirt/](http://www.ibm.com/developerworks/cn/linux/l-libvirt/)  
+[http://libvirt.org/index.html](http://libvirt.org/index.html)
