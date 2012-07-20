@@ -28,6 +28,31 @@ ul {
 /*
 ** Common declarations for child classes of node, comment, block, box etc
 */
+#header {
+    background: none repeat scroll 0 0 #F9F9F9;
+    border-bottom: 1px dotted Black;
+    color: #000000;
+    font-family: "Courier New",Verdana,monospace;
+    font-weight: bold;
+    overflow: auto;
+    padding: 24px;
+}
+#header a:visited, #header a:active, #header a:link {
+    color: #000000;
+    font-size: 18pt;
+    text-decoration: none;
+}
+#description {
+    color: Gray;
+    font-family: "Courier New",Verdana,monospace;
+    font-size: 10pt;
+    font-weight: normal;
+    margin: 0;
+    position: absolute;
+    right: 35px;
+    top: 30px;
+}
+
 #header h1 { margin-bottom:0; }
 #header .title {
   font:bold italic 2.1em Georgia,"trebuchet ms",sans-serif;
@@ -38,6 +63,35 @@ ul {
 #header .title a:active {
   text-decoration: underline;
 }
+
+#header-menu {
+    clear: both;
+    margin: 0 auto;
+    padding: 0 0 0;
+    width: 100%;
+}
+#header-menu ul {
+    background: none repeat scroll 0 0 #F0F0F0;
+    list-style-type: none;
+    margin: 0;
+    padding: 3px 40px;
+}
+#header-menu ul li {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 10pt;
+    font-style: normal;	
+}
+
+#header-menu ul li a {
+    color: #000000;
+    font-weight: bold;
+    margin: 0;
+    padding: 6px 10px;
+    text-decoration: none;
+}
+
 .node .title {
   font-size: 1.3em;
 }
