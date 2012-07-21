@@ -1,0 +1,33 @@
+---
+title: Lua学习小记
+category: Language
+tags:
+ - lua
+layout: post
+---
+作为一名游戏开发人员，都不能免俗地想打造一个自己的游戏引擎。现如今，游戏引擎不支持脚本引擎好像都说不过去。虽然Python也可作为游戏脚本，但对于手机游戏开发，嵌入这么个脚本引擎未免显得太重了写。所以，也开始折腾了起Lua的东西。
+
+这里有有些参考资料，总结得不错，供大家参考。
+
+作为游戏中的脚本引擎，其实关键是要弄明白c/c++和Lua之间如何互相调用(即弄清楚Lua C API)。大致弄清楚下面几个问题，就好说了。
+
+c-->lua
+1. c执行lua脚本    
+2. c访问lua中的变量  
+3. c调用lua中的函数  
+
+lua-->c
+1. 把c中的函数注册到lua中去  
+2. 把c中的变量扔到lua中去。
+
+网上有不少的相关代码，可以去查看。比如[这里](http://www.cppblog.com/flyindark/archive/2011/07/01/149937.html)，还有[这里](http://www.cppblog.com/makiv/archive/2008/01/11/40980.html)。
+
+这些代码初次读起来非常痛苦。重点理解下面几个概念：  
+1.在Lua中，基本数据：nil, boolean, number, string, userdata, function, thread, and table。都是有一个结构来表示。函数也是一种数据，可以被复制和传递等。  
+2.运行时一般有一个lua_state,作为一个运行状态，存储了当前的所有的全局变量(不仅仅是数据，函数也有)和栈。  
+3.Lua和c之间的交互是通过对栈进行操作来实现的 lua的栈类似于以下的定义, 它是在创建lua_State的时候创建的:  
+        TValue stack[max_stack_len]  // 欲知内情可以查 lstate.c 的stack_init函数
+    存入栈的数据类型包括数值, 字符串, 指针, talbe, 闭包等。  
+大量的API操作都是在对栈进行读取或者设置数据，隐含有栈顶的变化，这点一定要把握住，不然代码看着就晕眩的。关于Lua API的东西，这篇文档总结的不错。    
+
+大致这么多，后面会讨论关于如何用luaplus在c++中嵌入lua。

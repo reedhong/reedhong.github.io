@@ -1,0 +1,130 @@
+---
+title: 在Windows下开发OpenGL程序   
+category: Source
+tags:
+ - lua
+ - 武侠世界
+layout: post
+---
+
+Lua应用于游戏之中早不是新鲜事情，但对于游戏新人的我，却充满好奇。正好武侠世界嵌入Lua，重点阅读了相关部分。
+
+在阅读之前主要对下面个问题比较好奇：
+1. Lua跟C++如何混合编程？  
+2. Lua主要用来做些什么事情？  
+
+云风在《C/C++ 与 Lua 的混合编程》中提到：嵌入还是扩展，这是一个问题。  
+在武侠中，是采取嵌入的方式。通过LuaPlus将Lua嵌入到C++中。在C++中调用封装好的lua c api直接执行对应的Lua脚本。而为了方便Lua中调用C++，C++层做了大量的注册操作。由于所有的注册都是直接注入到Lua的global中，所以，我们只需要启动武侠客户端，在LuaObject LuaState::GetGlobals()实现处下一断点就可以观察所有的注册操作。按照代码运行顺序，为一下几个步骤：
+
+## 1.LuaPlus初始化虚拟机时注册的一些东西 ##
+<pre class="prettyprint lang-cpp">
+  ScriptFunctionsRegister( this );
+
+  GetGlobals().Register("LuaDumpGlobals", LS_LuaDumpGlobals);
+  GetGlobals().Register("LuaDumpObject", LS_LuaDumpObject);
+  GetGlobals().Register("LuaDumpFile", LS_LuaDumpFile);
+ }
+
+ GetGlobals().Register("LOG", LS_LOG);
+ GetGlobals().Register("_ALERT", LS_LOG);
+</pre>
+## 2.注册Helper ##
+<pre class="prettyprint lang-cpp">
+CHelperSystem::CHelperSystem() :
+ LuaExport< >("Helper") LuaExport(const char* pszName, LuaPlus::LuaState* pState = 0)
+{                        
+s_pMetaTable = new LuaPlus::LuaObject;
+s_pMetaTable = theState->GetGlobals().CreateTable(pszName); // Helper                        
+s_pMetaTable->SetObject("__index", *s_pMetaTable);                        
+LuaObject obj = theState->BoxPointer(s_pMe);                        
+obj.SetMetaTable(*s_pMetaTable);                        
+theState->GetGlobals().SetObject(pszName, obj);
+}                         
+</pre>
+## 3. 注册Variable,用于访问系统的配置信息 ##
+<pre class="prettyprint lang-cpp">
+VOID CScriptSystem::Initial(VOID*)
+｛
+    // 注册大量跟游戏逻辑相关的函数和对象,均定义在SCRIPT_SANDBOX(沙箱)命名空间下面
+｝
+VOID CVariableSystem::LoadVariable(LPCTSTR szFileName, VARIABLE_MAP& mapBuf)
+｛
+	m_pMetaTable = new LuaPlus::LuaObject;
+	*m_pMetaTable = CScriptSystem::GetMe()->GetLuaState()->GetGlobals().CreateTable("Variable");
+	m_pMetaTable->SetObject("__index", *m_pMetaTable);
+	....
+	obj_Variable.SetMetaTable(*m_pMetaTable);
+  
+	CScriptSystem::GetMe()->GetLuaState()->GetGlobals().SetObject("Variable", obj_Variable);
+｝
+</pre>
+
+
+
+## 4. 注册大量跟游戏逻辑相关的函数和对象 ##
+比如：游戏中玩家的信息
+<pre class="prettyprint lang-cpp">
+VOID CScriptSystem::Initial(VOID*)
+{
+    // 注册大量跟游戏逻辑相关的函数和对象,均定义在SCRIPT_SANDBOX(沙箱)命名空间下面
+｝
+</pre>
+
+
+
+## 5. UI控件相关 ##
+<pre class="prettyprint lang-cpp">
+void CGameUIScript::createBindings(void)
+｛
+	pLuaState->GetGlobals().Register("GetIconFullName", CUIIconsManager::LUA_GetIconFullName);
+	// Event参数
+	{
+		g_theUIEventArg.m_pMetaTable = new LuaPlus::LuaObject;
+		*(g_theUIEventArg.m_pMetaTable) = pLuaState->GetGlobals().CreateTable("CEGUIEventMetaTable");
+		g_theUIEventArg.m_pMetaTable->SetObject("__index", *(g_theUIEventArg.m_pMetaTable));
+
+		g_theUIEventArg.m_pMetaTable->RegisterObjectFunctor("GetValue", &CEventArg::LUA_GetValue);
+
+		LuaObject obj_UIEvent = pLuaState->BoxPointer(&(g_theUIEventArg));
+		obj_UIEvent.SetMetaTable(*(g_theUIEventArg.m_pMetaTable));
+		pLuaState->GetGlobals().SetObject("CEArg", obj_UIEvent);
+	}
+
+	//CUIWindowItem(this)
+
+	{
+		LuaObject metaUIWindowItem = pLuaState->GetGlobals().CreateTable("MetaTable_UIWindowItem");
+		metaUIWindowItem.SetObject("__index", metaUIWindowItem);
+	}
+
+	//控件, 只是注册控件的MetaTable: 有点像注册了一个类
+	{
+		LUA_CONTROL::Window::RegisterMetaTable();
+	}
+｝
+</pre>
+
+
+## 
+6. this指针：  ##
+<pre class="prettyprint lang-cpp">
+	CUIWindowItem
+       //创建脚本运行环境
+            m_pScriptEnv = g_pScriptSys->NewEnvironment(m_strWindowName.c_str(), m_strScriptFileName.c_str());{
+          // 创建一个对应环境的table
+          }
+
+            //---------------------------------------
+            //注册引用函数
+
+            //注册"this"对象
+            LuaObject metaUIWindowItem = g_pScriptSys->GetLuaState()->GetGlobals().GetByName("MetaTable_UIWindowItem");
+
+            LuaObject objThis = g_pScriptSys->GetLuaState()->BoxPointer(this);
+            objThis.SetMetaTable(metaUIWindowItem);
+            m_pScriptEnv->GetLuaObject()->SetObject("this", objThis);
+
+</pr>
+
+
+

@@ -1,0 +1,46 @@
+---
+title: libvirt hooks 机制  
+category: 虚拟机
+tags:
+ - libvirt
+ - hooks
+layout: post
+---
+参考：[http://libvirt.org/hooks.html](http://libvirt.org/hooks.html)
+
+## 说明： ##
+libvirt从0.8.0开始，支持某些特定行为触发用户自定义搅拌的机制。目前脚本hook，主要在下面的一些行为产生是触发：    
+1. libvirt daemon 启动，停止和重新reload时  
+2. qemu guest 启动或者停止时  
+3. lxc guest 启动或者停止时  
+
+## 脚本位置： ##
+$SYSCONFDIR/libvirt/hooks/。 一般在 /etc/libvirt/hooks/  
+定义在src/util/hooks.c:48   
+\#define LIBVIRT_HOOK_DIR SYSCONFDIR "/libvirt/hooks"  
+
+## 脚本的名字： ##
+/etc/libvirt/hooks/daemon  
+/etc/libvirt/hooks/qemu  
+/etc/libvirt/hooks/lxc  
+
+## 脚本参数： ##
+lxc中：  
+/etc/libvirt/hooks/lxc guest_name start begin -  
+/etc/libvirt/hooks/lxc guest_name stopped end -  
+另外，stdin中传入domain的xml格式的内容。比如通过python这样可以获得：  
+xml = sys.stdin.read()  
+非常方便
+
+
+## 脚本执行： ##
+1. start操作：先执行脚本，在执行其他libvirt的操作。所以，如果脚本出现错误，启动就失败
+2. shutdown操作：先执行正常libvirt操作，在执行脚本，所以，脚本出错不影响
+3. 脚本同步执行
+4. 脚本需要rx属性
+5. 加入新的脚本需要重启libvirt
+
+
+## 返回值和日志： ##
+如果一个脚本返回0，则认为执行成功，并不记录日志。当返回非0时，则标识失败。如果256还会记录日志。
+日志记录搅拌输出到stderr的值

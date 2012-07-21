@@ -1,0 +1,24 @@
+---
+title: 如何将gbk版本discuz转为化为utf-8版本？  
+category: Web
+tags:
+ - discuz
+ - encode
+ - python
+layout: post
+---
+
+面临的问题是：现有的discuz是gbk版本的，数据库采用的latin1，围绕其的ucenter，uchome均采用这种编码格式。由于业务出现其他变动，不得不将整个转为化utf-8编码的。包括程序和底层数据库。
+
+初看挺简单的问题。数据库大不了把数据通过mysqldump出来，然后转码,  最后直接mysql <**.sql 导入即可。程序下载一个新的编码软件安装下就可以。
+
+针对第一个问题，网上有很多的解决方案，典型的列举几处：
+[http://www.oicto.com/2011/05/mysql-latin1-utf-8/](http://www.oicto.com/2011/05/mysql-latin1-utf-8/)  
+[http://en.gentoo-wiki.com/wiki/Convert_latin1_to_UTF-8_in_MySQL](http://en.gentoo-wiki.com/wiki/Convert_latin1_to_UTF-8_in_MySQL)  
+尝试了他们的方法。由于数据有点大，2G多一点，中间会出现各种乌七八糟的错误。类似于某个命令有误或者辛辛苦苦转入结果却是乱码，非常让人揪心。
+
+最后只好写了一个python的小脚本，来做这个事情。非常好使。Python在干这种脏活方面非常擅长。而且，在编码处理方面也很清晰。可以很容易看出文件的编码以及在不同的编码中进行转换。具体的代码见[convert_data.py](http://cid-b6fcdff192837794.office.live.com/self.aspx/.Public/source/python/iconv%5E_dir.py) 
+
+另外是程序库的转码问题。由于在后续的运营中，discuz的代码以及经过不少的修改和二次开发。重新下载utf-8版本的显然是非常不现实的。所以，又写了一个python脚本进行程序的转码，具体的转码工作直接调用iconv命令。而且还需要区分文件格式。向图片这种就不需要转码了。其中用到python提供的walk接口。非常好用，提供遍历一个目录中所有文件的方法。是处理类似问题的利器。具体的脚本见[iconv_dir.py](http://cid-b6fcdff192837794.office.live.com/self.aspx/.Public/source/python/iconv%5E_dir.py) 
+
+**Python**的强大之处每每在这种时刻体现出来。建议大家都去学学，不无裨益。

@@ -1,0 +1,41 @@
+---
+title: libvirt中API的扩展 
+category: 虚拟机
+tags:
+ - libvirt
+layout: post
+---
+# 步骤 #
+
+1. 定义public API
+     docs/libvirt-api.xml 语言绑定的时候需要用到(TODO)
+     docs/schemas/domain.rng
+     docs/formatdomain.html.in
+     include/libvirt/libvirt.h.in  (非常重要)
+     src/libvirt_public.syms(这个是干嘛用的？没看出来， 非常重要，不然会出现变异错误)     
+
+
+2. 定义internal API
+     在src/driver.h 中增加对于的接口函数，并把对于的接口加入到其他需要支持的drivers中区。
+     
+3. 实现public API
+     src/libvirt.c 中实现总的，其他drivers实现具体的及细节,如：
+
+
+4. 实现remote protocol
+     rpc修改，涉及到三处改动：  
+     1) 修改协议：src/remote/remote_protocol.x。修改完之后需要make -C src rpcgen生产对于的rpc相关文件  
+          (1) 为每个新接口定义两个结构体。一个用来描述参数的，一个用来描述返回值  
+          (2) add values to the remote_procedure enum for each new function added to the API.  
+          然后运行 make rpcgen.生成新的下列文件：
+          daemon/remote_dispatch_args.h daemon/remote_dispatch_prototypes.h           daemon/remote_dispatch_table.h src/remote/remote_protocol.c src/remote/remote_protocol.h
+   
+     2) remote客户端的实现： src/remote/remote_driver.c
+     3) 增加是服务端的实现： daemon/remote.c
+     4) 修改remote_protocol-structs 文件
+
+5. 在test中实现具体的定义，用于virsh测试
+
+6. 修改virsh，增加命令接口
+
+5. 在某个driver上写上具体的接口，比如lxc的：src/lxc/lxc_driver.c

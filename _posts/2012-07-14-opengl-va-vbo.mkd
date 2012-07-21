@@ -1,0 +1,70 @@
+---
+title: VA和VBO
+category: OpenGL
+tags:
+ - va
+ - vbo
+layout: post
+---
+
+二者算是OpenGL学习初期稍微复杂一点的概念。如果对顶点有正确的认识，掌握起来就容易多了。对于OpenGL不少高级技术，我们不仅仅需要知其然，更加需要知其所以然。这样更好地应用于实践之中。我们首先谈VA(Vertex Array, 顶点数组)。
+
+
+在没有VA之前，比如我们需要绘制20条直线。
+<pre class="prettyprint lang-c">
+glBegin(GL_LINES);
+  glVertex2iv(p0);
+  ......
+  glVertex2iv(p20)
+glEnd();
+</pre>
+一共21次顶点提交。看着是不是有些浪费。还有如果绘制一个立方体，我们做裸奔的方式是啥呢？假设立方体的顶点为p1,...p8.我们可以有下面的绘制代码：
+<pre class="prettyprint lang-c">
+glBegin(GL_QUADS); // font
+  glVertex2iv(p0);
+  glVertex2iv(p1);
+  glVertex2iv(p2);
+  glVertex2iv(p3);
+glEnd();
+</pre>
+  
+// 左侧，右侧，底，顶，背  
+按照绘制前的方式依次绘制其他几个面，可以看出一共需要24此顶点提交，每个顶点被提交3次，看着也挺坑爹的。OpenGL图形绘制在设计时是非常讲究效率的。这个地方就需要去优化它，思路也很简单：减少调用，减少数据的提交。
+
+这种优化的技术就是VA(Vertex Array)。程序预先把顶点相关的属性(可不只是坐标，具体见OpenGL中的顶点)放在一块数组里面，指定相关属性的指针，在渲染的时候，通过索引值，或者偏移进行一次性提交。具体使用过程包括：
+
+(1) 激活相应属性的数组  
+  glEnableClientState(GL_VERTEX_ARRAY);   // 坐标  
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);  // 材质坐标  
+ 注：从这个地方的接口名字也可以看出，OpenGL是在设置Client的状态， glEnable/glDisable是在设置Server的状态。类似于对应的接口在OpenGL中还不少。所以，OpenGL的CS架构要深刻理解。
+
+(2) 指定数组的指针  
+ glVertexPointer( 3, GL_FLOAT, sizeof( gl_vertecex[0] ), gl_vertecex );    glTexCoordPointer( 2, GL_FLOAT, sizeof( gl_texcoords[0] ), gl_texcoords );   
+
+(3) 引用和渲染  
+glDrawElement(ith);  // 引用一个顶点
+glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indexArrays );  //  引用索引数组中的顶点
+glDrawArrays(GL_TRIANGLES, 0, 6); // 引用数组前6个顶点
+
+具体的接口的参数说明，大家可以参考OpenGL红宝书。 
+
+弄清VA的技术背景是不是也挺容易理解的。但优化是无止境的，我们是否可以往前走得更远呢？OpenGL的CS架构让我们每次都需要从Client提交数据到Server，引入VA之后，只是改进了其提交的效率，提交的现状并没有改变，数据还是老老实实一直放在Client在。Server端每次被动地接受这些数据，数据其实一直没有变而已。
+
+分析到这里，如果做过服务器开发或者web开发的同学就有会想到一个词：cache。数据都是一份，干嘛要每次提交，直接cache到服务端不就可以了。这种简单有效的优化思路就是我们的VBO(Vextex Buffer Object)技术。这样来看OpenGL中的一些技术名词就不在感到困惑，都有其存在的必然性。其使用过程可以简单描述如下：
+
+初始化阶段：  
+1. glGenBuffersARB(1, &nVBOVertices); //生成一个句柄  
+2. glBindBufferARB(GL_ARRAY_BUFFER_ARB, nVBOVertices); //声明该句柄为一个vbo句柄，并选择之  
+3. glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(vertices), vertices,GL_STATIC_DRAW); //将顶点集上传至server端  
+
+使用阶段：  
+1. glEnableClientState(GL_VERTEX_ARRAY); //开始使用vbo
+2. glBindBufferARB(GL_ARRAY_BUFFER_ARB, nVBOVertices);  //选择当前使用的vbo  
+3. glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));  //指定vbo顶点格式  
+4. glDrawArrays( GL_TRIANGLES, 0, g_pMesh->m_nVertexCount ); //画吧  
+5. glDisableClientState(GL_VERTEX_ARRAY);  
+6. glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);  
+收尾阶段：  
+1. glDeleteBuffersARB(1,&nVBOVertices); //删除句柄，同时删除server端顶点缓冲
+
+这样一个标准的创建，使用，释放，而且使用整数做句柄的过程其实也挺熟悉的。比如我们在Linux中创建一个文件，进程，socket等。这个过程也是OpenGL其他相关技术的标准过程。比如FBO，纹理映射。

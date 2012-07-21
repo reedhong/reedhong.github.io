@@ -1,6 +1,6 @@
 ---
 title: 测试虚拟机CPU资源分配  
-category: LXC
+category: 虚拟机
 tags:
  - lxc
  - vm
