@@ -1,6 +1,6 @@
 ---
 title: libvirt hooks 机制  
-category: 虚拟机
+category: VirtualMachine
 tags:
  - libvirt
  - hooks

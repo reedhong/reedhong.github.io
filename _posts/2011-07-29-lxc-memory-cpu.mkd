@@ -1,6 +1,6 @@
 ---
 title: libvirt中CPU和内存的细粒度管理机制  
-category: 虚拟机
+category: VirtualMachine
 tags:
  - libvirt
  - manage

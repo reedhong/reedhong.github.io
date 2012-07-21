@@ -1,6 +1,6 @@
 ---
 title: libvirt中API的扩展 
-category: 虚拟机
+category: VirtualMachine
 tags:
  - libvirt
 layout: post

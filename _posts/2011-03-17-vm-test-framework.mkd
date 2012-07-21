@@ -1,6 +1,6 @@
 ---
 title: 虚拟机测试框架  
-category: 虚拟机
+category: VirtualMachine
 tags:
  - lxc
  - vm

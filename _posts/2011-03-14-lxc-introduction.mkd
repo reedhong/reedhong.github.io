@@ -1,6 +1,6 @@
 ---
 title: Libvirt介绍
-category: 虚拟机
+category: VirtualMachine
 tags:
  - lxc
  - 虚拟化
