@@ -1,9 +1,9 @@
 ---
-title: OpenGL中的顶点 
+title: 在Windows下开发OpenGL程序
 category: OpenGL
 tags:
- - OpenGL
- - Vertex
+ - opengl
+ - windows
 layout: post
 ---
 
