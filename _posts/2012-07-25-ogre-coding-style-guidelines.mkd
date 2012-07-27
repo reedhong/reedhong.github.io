@@ -71,7 +71,7 @@ else
 	if  // 不可以
 </pre>
 
-- switch表达式中，case语句的缩进与switch一致，无须再次缩进
+- switch表达式中，case语句的缩进与switch一致，无须再次缩进  
 ***示例8: Switch表达式***<pre>
 // 可行
 switch (expr)
@@ -86,8 +86,8 @@ case CASE1:
 switch( expr )
 {
   case CASE1:
-      // The case statement should be on the same
-      // indentation level of the switch statement
+  // The case statement should be on the same
+  // indentation level of the switch statement
       break;
 };
 </pre>
