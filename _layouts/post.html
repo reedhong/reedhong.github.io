@@ -6,8 +6,8 @@ layout: default
 <div class="node">
 	<div class="content">
 		{{ content }}
-		本文来源于 XiaoHong (http://xiaohong.me/), 转载请注明.
-		原文地址：{{ page.url }}
+		本文来源于 <a href="http://{{ site.domain }}/">XiaoHong (http://{{site.domain}}/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://{{ site.domain }}{{ page.url }}" >http://{{ site.domain }}{{ page.url }}</a>
 	</div>
 
 	{% assign post = page %}
