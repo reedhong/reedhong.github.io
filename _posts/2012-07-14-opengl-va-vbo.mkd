@@ -1,5 +1,5 @@
 ---
-title: VA和VBO
+title: OpenGL中的VA和VBO
 category: OpenGL
 tags:
  - va
