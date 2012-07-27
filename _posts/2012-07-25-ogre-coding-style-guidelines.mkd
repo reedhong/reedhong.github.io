@@ -18,31 +18,28 @@ layout: post
 - 用4个space做缩进，而不是tab
 
 - 绝大多数的大括号都另起一行，包括：if, else, for, while,类定义，函数定义等  
-***示例1：***
-<pre class="prettyprint lang-cpp">
+***示例1：***<pre>
 while(expr)
 {
-// 另起一行
+	//另起一行
 }
 </pre>
 
 - 在文件中定义namespace的时候，大括号无须另起一行  
-***示例2：***
-<pre class="prettyprint lang-cpp">
+***示例2：***<pre>
 while(expr)
 {
 // 另起一行
 }
 </pre>
 - 对于只有一行的逻辑块，无须大括号，但需要另起一行，加上缩进。但如果其前置代码有大括号(比如：if分支后面的else)，那么就算只有一行代码，也需要加上大括号。    
-***示例3：***  
-<pre class="prettyprint lang-cpp">
+***示例3：***  <pre>
 if(expr)
 // 一行代码
 else
 // 也是一行
 </pre>    
-***示例4：***<pre class="prettyprint lang-cpp">
+***示例4：***<pre>
 if(expr)
 {
 // 多行代码

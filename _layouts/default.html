@@ -4,12 +4,10 @@
 		<title>{% if page.title %}{{ page.title | append: ' - ' }}{% endif %}{{ site.title }}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.rss}}" />
-		<link rel="stylesheet" type="text/css" href="/css/drupal.css" />
-		<link rel="stylesheet" type="text/css" href="/css/common.css" />
+		<!--<link rel="stylesheet" type="text/css" href="/css/drupal.css" /> -->
+		<!--<link rel="stylesheet" type="text/css" href="/css/common.css" /> -->
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
-		<link rel="stylesheet" type="text/css" href="/css/syntax.css" />
-		<link rel="stylesheet" type="text/css" href="/css/prettify.css" />
-		<script type="text/javascript" src="/js/prettify/prettify.js">		
+		<!--<link rel="stylesheet" type="text/css" href="/css/syntax.css" /> -->	
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', '{{ site.ga }}']);
@@ -22,10 +20,10 @@
 		</script>
 	</head>
 
-	<body onload="prettyPrint();">
+	<body>
 		<div id="header">
 		<a title="{{ site.title }}" href="/">{{ site.title }}</a>
-		<p id="description">引刀成一快，不负少年头</p>
+		<p id="description">{{ site.subtitle }}</p>
 		</div>
 		<div id="header-menu">
 			<ul>
@@ -91,7 +89,7 @@
 					<div class="block">
 						<h2 class="title">Subscribe</h2>
 						<div class="content">
-							<a href="http://feeds.feedburner.com/noding" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
 						</div>
 					</div>
 
