@@ -32,14 +32,14 @@ while(expr)
 // 另起一行
 }
 </pre>
-- 对于只有一行的逻辑块，无须大括号，但需要另起一行，加上缩进。但如果其前置代码有大括号(比如：if分支后面的else)，那么就算只有一行代码，也需要加上大括号。    
+- 对于只有一行的代码块，无须大括号，但需要另起一行，加上缩进。但如果其前置代码有大括号(比如：if分支后面的else)，那么就算只有一行代码，也需要加上大括号。    
 ***示例3：一行逻辑块***  <pre>
 if(expr)
 // 一行代码
 else
 // 也是一行
 </pre>    
-***示例4：相连逻辑快***<pre>
+***示例4：相连代码块***<pre>
 if(expr)
 {
 // 多行代码
@@ -49,13 +49,142 @@ else
 //只有一行，但也需要加上大括号
 }
 </pre>
-- 如果条件和循环语句后面带"("，则需要在"("前输入空格
+- 如果条件和循环语句后面带"("，则需要在"("前输入空格  
 ***示例5:带空格的圆括号***<pre>
 if (expr)
-	// space after if
+	// if后面有空格
 while (expr)
-	// space after while
+	// while后面有空格
 for (expr)
-	// space after for
+	// for后面有空格
+</pre>
 
-...待续
+- 如果条件和循环语句后面被括起来的表达式与括号见不能有空格  
+***示例6:表达式的空格***<pre>
+if (expr) // 可行
+if ( expr ) // 不可以
+</pre>
+- else if 代码块必须放在一行  
+***示例7: else if 代码块***<pre>
+else if // 可行
+else
+	if  // 不可以
+</pre>
+
+- switch表达式中，case语句的缩进与switch一致，无须再次缩进
+***示例8: Switch表达式***<pre>
+// 可行
+switch (expr)
+{
+case CASE1:
+  // The case statement is on the same indentation level
+  // with the switch, and it's statements are indented
+  // one level.
+  break;
+};
+// 不可以
+switch( expr )
+{
+  case CASE1:
+      // The case statement should be on the same
+      // indentation level of the switch statement
+      break;
+};
+</pre>
+- 所有的名字必须是英文
+- 方法和函数名必须用动词清楚地表达其意图。命名采取大小写混合的方式，首字母是小写。如果方法是给引擎内部使用，而不是外部的通用API，则需要加上前缀"_"。
+
+- 变量必须清晰第表达去包含的信息。命名也采取大小写混合的方式，首字母是小写。私用和受保护的成名变量加上前缀"m",后面更上大写字母。名字可以用缩写，但要保证很容易理解。比较特殊的是循环变量名(比如 for循环),可以用简单的字母变量，比如"i".  
+***示例9: 变量命名***<pre>
+loggingLevel // 最清晰
+logLvl // 可接受，比较清晰
+ll // 不可接受
+for (int i = 0; i < max; ++i) // 可行
+</pre>
+*我们可以给这些变量名加上前缀"m"吗？(注:只有成员变量才行)*
+
+- 每个类应该拥有自己单独的文件，除非跟另外的类关联度非常大或者代码量很小
+
+
+#设计指南#
+
+- 应该把初始化放在构造函数里面
+
+- 尽可能多地使用const，包括变量和函数
+
+- 尽量用传引用替代传值
+
+- 调用标准库函数加上"::"前缀
+
+- 强烈推荐使用c++风格，而不是c风格
+
+- 对于STL容器，判断容器是否为空，使用empty()而不是检查size()是否为0
+
+- 对于迭代器变量，使用++var，而不是var++  
+*(注:印象中侯杰的stl源码分析中提到过，前置方式要效率高些)*
+
+- 如果基类中的函数带有virtual，子类中也应该带上
+
+- 基本类型不要用缩写  
+***示例10: 类型名***<pre>
+unsigned int // 可行
+uint // 不可以
+</pre>
+
+- 用c++风格的头文件替代c风格  
+***示例11: C++风格的头***<pre>
+\#inclue <cstring> // 可行
+\#include <string.h> // 不可行
+</pre>
+
+- 尽量使用C++标准库和STL函数，而不是C stdlib中的函数  
+***示例12: 函数使用***<pre>
+// 可行
+ifstream fil;
+fil.open("filename.txt");
+fil.close();
+// 不可以
+FILE* fil = fopen("filename.txt", "w");
+fclose(fil);
+</pre>
+
+- 类中所有的变量都应该在构造函数中初始化一个合理值。
+
+- 没有必要在删除一个指针的时候做NULL检测，因为在C++中delete NULL是安全的  
+***示例13: 删除指针***<pre>
+// 可行, delete NULL是安全的
+Val* ptrValue = 0;
+delete ptrValue;
+// 不可以，没有必要嘛 
+if (ptrValue != NULL)
+    delete ptrValue;
+</pre>
+
+- 0比NULL要好  
+***示例14: 0更好***<pre>
+Val* ptrValue = 0; // 可行
+Val* ptrValue = NULL; // 不可以
+</pre>
+
+- 当一个成员指针被删除掉，应该赋0值
+
+
+
+#OGRE特殊指南#
+- 用Ogre::String 取代 std::string或者其他字符串  
+  
+
+*(注：初次翻译，不当之处还请指出)*
+
+
+
+
+
+
+
+
+
+
+
+
+
