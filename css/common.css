@@ -37,18 +37,15 @@ table {
 .lineno {
 	color: #586E75;
 }
-code, pre {
-	display: block;
-	font-size: 13px;
-	line-height: 1.6em;
-	font-family: Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace !important;
-	overflow-x: auto;
-	overflow-y: hidden;
-}
+
 pre {
-	width: 660px;
-	padding: 0;
-	background: #F0F0F0;
+    background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
 }
 code {
 	padding: .5em 1em;
