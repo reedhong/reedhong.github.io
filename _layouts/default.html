@@ -1,13 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
 	<head>
 		<title>{% if page.title %}{{ page.title | append: ' - ' }}{% endif %}{{ site.title }}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.rss}}" />
-		<!--<link rel="stylesheet" type="text/css" href="/css/drupal.css" /> -->
-		<!--<link rel="stylesheet" type="text/css" href="/css/common.css" /> -->
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
-		<!--<link rel="stylesheet" type="text/css" href="/css/syntax.css" /> -->	
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', '{{ site.ga }}']);
@@ -89,7 +86,7 @@
 					<div class="block">
 						<h2 class="title">Subscribe</h2>
 						<div class="content">
-							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+							<a href="{{ site.rss}}" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
 						</div>
 					</div>
 
