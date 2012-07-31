@@ -1,0 +1,131 @@
+---
+title: 一些3D模型格式介绍
+category: Game
+tags:
+ - model
+ - 3D
+ - introduction
+layout: post
+---
+
+常用3D模型的相关资源整理。
+
+## MS3D
+
+- wiki   
+[http://zh.wikipedia.org/wiki/MilkShape_3D](http://zh.wikipedia.org/wiki/MilkShape_3D)  
+- 说明   
+它主要用于低多边形游戏角色的建模和动作编辑。支持多种游戏中的模型文件，可以打开例如《半条命》、《Quake》、《反恐精英》等。比较简单和常用。
+- 解析  
+[http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=31](http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=31)  
+
+
+
+
+##OBJ
+- wiki  
+[http://en.wikipedia.org/wiki/Wavefront_.obj_file](http://en.wikipedia.org/wiki/Wavefront_.obj_file)
+
+- 说明  
+由Wavefront公司在其Advanced Visualizer动画包中定义的。是一个开放的格式，被很多3D软件所支持。它只是定义了一个无题的3D几何模型而已，包括：顶点位置，材质坐标，法线。不涉及骨骼动画的东西。
+- 格式  
+[http://www.martinreddy.net/gfx/3d/OBJ.spec](http://www.martinreddy.net/gfx/3d/OBJ.spec)
+- 资源：
+http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html
+
+
+
+##3DS
+- wik  
+[http://en.wikipedia.org/wiki/.3ds](http://en.wikipedia.org/wiki/.3ds)
+- 时间  
+1990年。
+- 说明  
+3dsmax的前身3dsutido的格式。当时业界的通用标准格式之一。能够稳定地保存模型mesh信息和uv信息，也兼容基础骨骼和基本动画。现在主要用来存储mesh模型。所有3D软件通用。
+一种二进制存储格式。基于chunk
+
+- 格式  
+[http://www.martinreddy.net/gfx/3d/3DS.spec](http://www.martinreddy.net/gfx/3d/3DS.spec)
+
+- 解析  
+[http://anony3721.blog.163.com/blog/static/5119742011525103920153/](http://anony3721.blog.163.com/blog/static/5119742011525103920153/)  
+[http://www.gamedev.net/topic/313126-3ds-parsing-tutorial/](http://www.gamedev.net/topic/313126-3ds-parsing-tutorial/) 
+[http://www.spacesimulator.net/wiki/index.php?title=Tutorials:3ds_Loader](http://www.spacesimulator.net/wiki/index.php?title=Tutorials:3ds_Loader)
+
+
+##MD2
+- wiki  
+	[http://en.wikipedia.org/wiki/MD2_(file_format)](http://en.wikipedia.org/wiki/MD2_(file_format))
+- 说明  
+QuakeII引擎使用。主要用来支持动画模型，但也可以存储静态模型数据。通过加入关键帧来实现动画，关键帧存储在模型数据中，引擎复杂插值计算。
+
+- 格式
+[http://codeand.me/a/quake-ii_md2_format_chinese/](http://codeand.me/a/quake-ii_md2_format_chinese/)
+
+- 解析  
+[http://wenku.baidu.com/view/6b42cb2bcfc789eb172dc841.html](http://wenku.baidu.com/view/6b42cb2bcfc789eb172dc841.html)
+[http://wenku.baidu.com/view/8a50c58183d049649b665840.html](http://wenku.baidu.com/view/8a50c58183d049649b665840.html)  *(非常详尽)*
+
+
+
+##MD3
+- wiki  
+[http://en.wikipedia.org/wiki/MD3_\(file_format\)](http://en.wikipedia.org/wiki/MD3_\(file_format\))  
+- 说明  
+QuakeIII引擎使用。MD2升级版本，不支持骨骼动画。仍然是关键帧动画的模式。在一个MD3模型动画系统中，通常有*.md3，*.skin，*.cfg以及一些图片格式文件组成，如（animation.cfg、head.md3、head_default.skin、lower.md3、lower_default.skin、upper.md3、upper_default.skin、band.tga、cigar.tga）。MD3文件为二进制格式文件，.skin，.cfg为文本文件。
+- 格式  
+[http://linux.ucla.edu/~phaethon/q3/formats/md3format.html](http://linux.ucla.edu/~phaethon/q3/formats/md3format.html)
+
+- 解析  
+[http://dev.gameres.com/Program/Visual/3D/MD3Format.htm](http://dev.gameres.com/Program/Visual/3D/MD3Format.htm)
+
+
+
+##FBX:
+- wiki  
+[http://en.wikipedia.org/wiki/FBX](http://en.wikipedia.org/wiki/FBX)
+- 时间  
+1996年FilmBox1.5  
+- 说明  
+FBX是Autodesk的一个用于跨平台的免费三维数据交换的格式（最早是由Kaydara在FilmBox中开发，但后来被AutoDesk其收购），目前被众多的标准建模软件所支持，在游戏开发领域也常用来作为各种建模工具的标准导出格式。Autodesk提供了基于C++（还有Python）的SDK来实现对FBX格式的各种读写、修改以及转换等操作，之所以如此是因为FBX的格式不是公开的，这也是FBX的诟病之一。与FBX相对的则是格式开源的Collada，它的应用也很广泛
+
+- 格式  
+非开源，无完成格式描述文档。可以用AutoDesk提供的SDK进行读写，也有一些三方的Library支持。
+
+- 解析  
+[http://blog.csdn.net/bugrunner/article/details/7210511](http://blog.csdn.net/bugrunner/article/details/7210511)
+[http://openendedgroup.com/field/LoadingFBXFiles](http://openendedgroup.com/field/LoadingFBXFiles)
+
+
+
+##Collada
+- wiki  
+[http://en.wikipedia.org/wiki/COLLADA](http://en.wikipedia.org/wiki/COLLADA)
+- 说明  
+1. 开放文档标准，基于XML。数字内容的中间交换格式，绝大多数3D软件和很多3D游戏引擎都支持。
+2. COLLAborative Design Activity 的缩写
+3. 一般的文件后缀: .dae(digital asset exchange)
+4. 最早由Sony创建的，现归Khronos Group(OpenGL之类也是这个组织的)
+5. 编程方式类似于COM
+
+- 解析  
+[http://www.cnblogs.com/Jedimaster/archive/2007/12/01/979256.html](http://www.cnblogs.com/Jedimaster/archive/2007/12/01/979256.html)  
+[http://opencollada.org/](http://opencollada.org/)
+
+- 资源  
+gamedev上面的讨论collada vs fbx: [http://www.gamedev.net/topic/467753-collada-vs-autodesk-fbx/](http://www.gamedev.net/topic/467753-collada-vs-autodesk-fbx/)  
+对coolada，fbx的评价：[http://stackoverflow.com/questions/441388/most-common-3d-model-format](http://stackoverflow.com/questions/441388/most-common-3d-model-format)  
+*二者均属于交换性质的格式，为了尽量支持更多的格式，在设计上不可避免地陷入复杂，因而导致效率底下。所以应用程序在实际的时候会转化为自有格式，以提高效率。*
+
+ 
+
+
+
+
+
+
+
+
+
+
+
