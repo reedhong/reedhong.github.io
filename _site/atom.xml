@@ -1,0 +1,1342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+<title>小洪</title>
+<link href="http://xiaohong.me/atom.xml" rel="self"/>
+<link href="http://xiaohong.me/"/>
+<updated>2012-07-31T22:29:31+08:00</updated>
+<id>http://xiaohong.me/</id>
+<author>
+    <name>reedhong</name>
+    <email>fishwarter@gmail.com</email>
+</author>
+
+
+<entry>
+    <title>一些3D模型格式介绍</title>
+    <link href="http://reedhong.github.com/blog/2012/07/31/3d-model/"/>
+    <updated>2012-07-31T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/31/3d-model</id>
+    <content type="html">&lt;p&gt;常用3D模型的相关资源整理。&lt;/p&gt;
+
+&lt;h2&gt;MS3D&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wiki &lt;br/&gt;
+&lt;a href=&quot;http://zh.wikipedia.org/wiki/MilkShape_3D&quot;&gt;http://zh.wikipedia.org/wiki/MilkShape_3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;说明 &lt;br/&gt;
+它主要用于低多边形游戏角色的建模和动作编辑。支持多种游戏中的模型文件，可以打开例如《半条命》、《Quake》、《反恐精英》等。比较简单和常用。&lt;/li&gt;
+&lt;li&gt;解析&lt;br/&gt;
+&lt;a href=&quot;http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=31&quot;&gt;http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=31&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;OBJ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;wiki&lt;br/&gt;
+&lt;a href=&quot;http://en.wikipedia.org/wiki/Wavefront_.obj_file&quot;&gt;http://en.wikipedia.org/wiki/Wavefront_.obj_file&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;说明&lt;br/&gt;
+由Wavefront公司在其Advanced Visualizer动画包中定义的。是一个开放的格式，被很多3D软件所支持。它只是定义了一个无题的3D几何模型而已，包括：顶点位置，材质坐标，法线。不涉及骨骼动画的东西。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;格式&lt;br/&gt;
+&lt;a href=&quot;http://www.martinreddy.net/gfx/3d/OBJ.spec&quot;&gt;http://www.martinreddy.net/gfx/3d/OBJ.spec&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;资源：
+http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;3DS&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wik&lt;br/&gt;
+&lt;a href=&quot;http://en.wikipedia.org/wiki/.3ds&quot;&gt;http://en.wikipedia.org/wiki/.3ds&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;时间&lt;br/&gt;
+1990年。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;说明&lt;br/&gt;
+3dsmax的前身3dsutido的格式。当时业界的通用标准格式之一。能够稳定地保存模型mesh信息和uv信息，也兼容基础骨骼和基本动画。现在主要用来存储mesh模型。所有3D软件通用。
+一种二进制存储格式。基于chunk&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;格式&lt;br/&gt;
+&lt;a href=&quot;http://www.martinreddy.net/gfx/3d/3DS.spec&quot;&gt;http://www.martinreddy.net/gfx/3d/3DS.spec&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;解析&lt;br/&gt;
+&lt;a href=&quot;http://anony3721.blog.163.com/blog/static/5119742011525103920153/&quot;&gt;http://anony3721.blog.163.com/blog/static/5119742011525103920153/&lt;/a&gt;&lt;br/&gt;
+&lt;a href=&quot;http://www.gamedev.net/topic/313126-3ds-parsing-tutorial/&quot;&gt;http://www.gamedev.net/topic/313126-3ds-parsing-tutorial/&lt;/a&gt;
+&lt;a href=&quot;http://www.spacesimulator.net/wiki/index.php?title=Tutorials:3ds_Loader&quot;&gt;http://www.spacesimulator.net/wiki/index.php?title=Tutorials:3ds_Loader&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;MD2&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wiki&lt;br/&gt;
+  &lt;a href=&quot;http://en.wikipedia.org/wiki/MD2_(file_format&quot;&gt;http://en.wikipedia.org/wiki/MD2_(file_format)&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;说明&lt;br/&gt;
+QuakeII引擎使用。主要用来支持动画模型，但也可以存储静态模型数据。通过加入关键帧来实现动画，关键帧存储在模型数据中，引擎复杂插值计算。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;格式
+&lt;a href=&quot;http://codeand.me/a/quake-ii_md2_format_chinese/&quot;&gt;http://codeand.me/a/quake-ii_md2_format_chinese/&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;解析&lt;br/&gt;
+&lt;a href=&quot;http://wenku.baidu.com/view/6b42cb2bcfc789eb172dc841.html&quot;&gt;http://wenku.baidu.com/view/6b42cb2bcfc789eb172dc841.html&lt;/a&gt;
+&lt;a href=&quot;http://wenku.baidu.com/view/8a50c58183d049649b665840.html&quot;&gt;http://wenku.baidu.com/view/8a50c58183d049649b665840.html&lt;/a&gt;  &lt;em&gt;(非常详尽)&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;MD3&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wiki&lt;br/&gt;
+&lt;a href=&quot;http://en.wikipedia.org/wiki/MD3_(file_format)&quot;&gt;http://en.wikipedia.org/wiki/MD3_(file_format)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;说明&lt;br/&gt;
+QuakeIII引擎使用。MD2升级版本，不支持骨骼动画。仍然是关键帧动画的模式。在一个MD3模型动画系统中，通常有&lt;em&gt;.md3，&lt;/em&gt;.skin，*.cfg以及一些图片格式文件组成，如（animation.cfg、head.md3、head_default.skin、lower.md3、lower_default.skin、upper.md3、upper_default.skin、band.tga、cigar.tga）。MD3文件为二进制格式文件，.skin，.cfg为文本文件。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;格式&lt;br/&gt;
+&lt;a href=&quot;http://linux.ucla.edu/~phaethon/q3/formats/md3format.html&quot;&gt;http://linux.ucla.edu/~phaethon/q3/formats/md3format.html&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;解析&lt;br/&gt;
+&lt;a href=&quot;http://dev.gameres.com/Program/Visual/3D/MD3Format.htm&quot;&gt;http://dev.gameres.com/Program/Visual/3D/MD3Format.htm&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;FBX:&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wiki&lt;br/&gt;
+&lt;a href=&quot;http://en.wikipedia.org/wiki/FBX&quot;&gt;http://en.wikipedia.org/wiki/FBX&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;时间&lt;br/&gt;
+1996年FilmBox1.5&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;说明&lt;br/&gt;
+FBX是Autodesk的一个用于跨平台的免费三维数据交换的格式（最早是由Kaydara在FilmBox中开发，但后来被AutoDesk其收购），目前被众多的标准建模软件所支持，在游戏开发领域也常用来作为各种建模工具的标准导出格式。Autodesk提供了基于C++（还有Python）的SDK来实现对FBX格式的各种读写、修改以及转换等操作，之所以如此是因为FBX的格式不是公开的，这也是FBX的诟病之一。与FBX相对的则是格式开源的Collada，它的应用也很广泛&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;格式&lt;br/&gt;
+非开源，无完成格式描述文档。可以用AutoDesk提供的SDK进行读写，也有一些三方的Library支持。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;解析&lt;br/&gt;
+&lt;a href=&quot;http://blog.csdn.net/bugrunner/article/details/7210511&quot;&gt;http://blog.csdn.net/bugrunner/article/details/7210511&lt;/a&gt;
+&lt;a href=&quot;http://openendedgroup.com/field/LoadingFBXFiles&quot;&gt;http://openendedgroup.com/field/LoadingFBXFiles&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Collada&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wiki&lt;br/&gt;
+&lt;a href=&quot;http://en.wikipedia.org/wiki/COLLADA&quot;&gt;http://en.wikipedia.org/wiki/COLLADA&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;说明&lt;/li&gt;
+&lt;li&gt;开放文档标准，基于XML。数字内容的中间交换格式，绝大多数3D软件和很多3D游戏引擎都支持。&lt;/li&gt;
+&lt;li&gt;COLLAborative Design Activity 的缩写&lt;/li&gt;
+&lt;li&gt;一般的文件后缀: .dae(digital asset exchange)&lt;/li&gt;
+&lt;li&gt;最早由Sony创建的，现归Khronos Group(OpenGL之类也是这个组织的)&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;编程方式类似于COM&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;解析&lt;br/&gt;
+&lt;a href=&quot;http://www.cnblogs.com/Jedimaster/archive/2007/12/01/979256.html&quot;&gt;http://www.cnblogs.com/Jedimaster/archive/2007/12/01/979256.html&lt;/a&gt;&lt;br/&gt;
+&lt;a href=&quot;http://opencollada.org/&quot;&gt;http://opencollada.org/&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;资源&lt;br/&gt;
+gamedev上面的讨论collada vs fbx: &lt;a href=&quot;http://www.gamedev.net/topic/467753-collada-vs-autodesk-fbx/&quot;&gt;http://www.gamedev.net/topic/467753-collada-vs-autodesk-fbx/&lt;/a&gt;&lt;br/&gt;
+对coolada，fbx的评价：&lt;a href=&quot;http://stackoverflow.com/questions/441388/most-common-3d-model-format&quot;&gt;http://stackoverflow.com/questions/441388/most-common-3d-model-format&lt;/a&gt;&lt;br/&gt;
+&lt;em&gt;二者均属于交换性质的格式，为了尽量支持更多的格式，在设计上不可避免地陷入复杂，因而导致效率底下。所以应用程序在实际的时候会转化为自有格式，以提高效率。&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+</entry>
+
+<entry>
+    <title>OpenGL中的顶点，图元，片段和像素</title>
+    <link href="http://reedhong.github.com/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/"/>
+    <updated>2012-07-28T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel</id>
+    <content type="html">&lt;p&gt;上次写过一篇&lt;a href=&quot;/blog/2012/07/14/open-vertex/&quot;&gt;OpenGL中的顶点&lt;/a&gt;, 意犹未尽，本篇想把这几个概念放在一块儿聊聊。通过最近的学习，我发现理解这几个基本名词已经它们之间的转换关系是理解OpenGL运作机理的关键，特别是所谓的&lt;a href=&quot;http://en.wikipedia.org/wiki/Graphics_pipeline&quot;&gt;渲染管线&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;有图有真相，我们先看一张图：&lt;br/&gt;
+&lt;img src=&quot;http://xiaohong.me/images/blog/pipeline-transfer.jpg&quot; alt=&quot;形象化OpenGL管线&quot; /&gt; &lt;br/&gt;
+网上和各种教科书上存在各种渲染管线的图，这张图算是最形象，最能说明问题的。OpenGL处理过程就是一个顶点(Vertex)--&gt;图元(Primitive)--&gt;片段（Fragment)--&gt;像素(Pixel)的过程。&lt;/p&gt;
+
+&lt;h1&gt;1. 顶点(Vertex)--&gt;图元(Primitive)&lt;/h1&gt;
+
+&lt;p&gt;此过程的专业术语:&lt;strong&gt;图元装配(Primitive Assembly)&lt;/strong&gt;。&lt;br/&gt;
+如上图，就是把顶点变成指定的基本图元(点，线，面)。需要指出的是，此处输入的顶点，是经过一系列视图变换之后的顶点。动态渲染管线中这种变换是通过Vertex Shader实现的。此处还有一个主要任务就是裁减。比如3维不可见面裁减掉，应用程序指定裁减面，需要干掉不在里面的。被投影矩阵给裁减掉等。&lt;/p&gt;
+
+&lt;h1&gt;2. 图元(Primitive)--&gt;片段(Fragment)&lt;/h1&gt;
+
+&lt;p&gt;此过程的专业术语:&lt;strong&gt;光栅化(Rasterization)&lt;/strong&gt;。  &lt;br/&gt;
+前面的图元还只是一个几何概念(比如：三个顶点确定一个三角形)。但我们最终需要在屏幕上把其绘制出来，就需要转化为屏幕上的一个个点。但此时还不是真正的像素点，称之为片段。它是一种中间状态，拥有像素的所有相关属性，有可能被更新到一个像素上。由上面的图可以看出，顶点和片段不是一一对应的，一个被填充的三角形有三个顶点就可以描述，但需要大量的片段才能组合成。但如何从3个顶点变成一系列的片段呢？这个就要用到我们在学习图形学理论中经常要提及的各种&lt;strong&gt;插值算法&lt;/strong&gt;。这里的插值不仅仅是坐标，还有颜色，纹理坐标等。&lt;/p&gt;
+
+&lt;h1&gt;3. 片段(Fragment)--&gt;像素(Pixel)&lt;/h1&gt;
+
+&lt;p&gt;此过程的专业术语:&lt;strong&gt;片段操作(Per-Fragment Operationes)&lt;/strong&gt;。&lt;br/&gt;
+在讨论之前先谈谈片段存在的意义。比如我们绘制两个人一前一后地站着，那么我们投影在屏幕上谁应该被遮挡呢?最简单的可以理解为先绘制的被遮挡。这个在2D游戏里面经常这样简单处理。但在3D里面怎么办？我们的镜头是可以移动的，人也是各种变动的。总是要去维护这种关系就非常难。我们就通过一些测试来搞定这些事情。测试通过的片段就将成替代原有的像素成为新的像素(当然，我们不只有简单的替代操作)。所有片段这种中间状态的存在就非常有意义了。片段操作就是一系列的测试，这些测试最终影响一个片段所处位置的像素属性。二者进行各种复杂的操作最终实现我们想要的效果。具体片段操作和测试可以见红宝书第10章。&lt;/p&gt;
+
+&lt;p&gt;最后在来一张更详细的图说明整个过程
+&lt;img src=&quot;http://xiaohong.me/images/blog/pipeline.png&quot; alt=&quot;形象化OpenGL管线&quot; /&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>Ogre编码规范</title>
+    <link href="http://reedhong.github.com/blog/2012/07/25/ogre-coding-style-guidelines/"/>
+    <updated>2012-07-25T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines</id>
+    <content type="html">&lt;p&gt;翻译自: &lt;a href=&quot;http://temas.obelisk.net/ogre/CR/docs/howto.html&quot;&gt;http://temas.obelisk.net/ogre/CR/docs/howto.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;文章的前半段主要说明此文档存在的意义和Code Review的过程，暂不做翻译，直接看编码规范&lt;/p&gt;
+
+&lt;h1&gt;风格&lt;/h1&gt;
+
+&lt;p&gt;下面的这些规范包含缩进，大括号放置，变量命名等。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;用4个space做缩进，而不是tab&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;绝大多数的大括号都另起一行，包括：if, else, for, while,类定义，函数定义等&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例1：大括号的一般写法&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+while(expr)
+{
+  //另起一行
+}
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在文件中定义namespace的时候，大括号无须另起一行&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例2：名字域中大括号的写法&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+while(expr)
+{
+// 另起一行
+}
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;对于只有一行的代码块，无须大括号，但需要另起一行，加上缩进。但如果其前置代码有大括号(比如：if分支后面的else)，那么就算只有一行代码，也需要加上大括号。  &lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例3：一行逻辑块&lt;/em&gt;&lt;/strong&gt;  &lt;pre&gt;
+if(expr)
+// 一行代码
+else
+// 也是一行
+&lt;/pre&gt;  &lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例4：相连代码块&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+if(expr)
+{
+// 多行代码
+｝
+else
+{
+//只有一行，但也需要加上大括号
+}
+&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果条件和循环语句后面带&quot;(&quot;，则需要在&quot;(&quot;前输入空格&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例5:带空格的圆括号&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+if (expr)
+  // if后面有空格
+while (expr)
+  // while后面有空格
+for (expr)
+  // for后面有空格
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果条件和循环语句后面被括起来的表达式与括号见不能有空格&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例6:表达式的空格&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+if (expr) // 可行
+if ( expr ) // 不可以
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;else if 代码块必须放在一行&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例7: else if 代码块&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+else if // 可行
+else
+  if  // 不可以
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;switch表达式中，case语句的缩进与switch一致，无须再次缩进&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例8: Switch表达式&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+// 可行
+switch (expr)
+{
+case CASE1:
+// The case statement is on the same indentation level
+// with the switch, and it's statements are indented
+// one level.
+break;
+};
+// 不可以
+switch( expr )
+{
+case CASE1:
+// The case statement should be on the same
+// indentation level of the switch statement&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;break;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;};
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;所有的名字必须是英文&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;方法和函数名必须用动词清楚地表达其意图。命名采取大小写混合的方式，首字母是小写。如果方法是给引擎内部使用，而不是外部的通用API，则需要加上前缀&quot;_&quot;。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;变量必须清晰第表达去包含的信息。命名也采取大小写混合的方式，首字母是小写。私用和受保护的成名变量加上前缀&quot;m&quot;,后面更上大写字母。名字可以用缩写，但要保证很容易理解。比较特殊的是循环变量名(比如 for循环),可以用简单的字母变量，比如&quot;i&quot;.&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例9: 变量命名&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+loggingLevel // 最清晰
+logLvl // 可接受，比较清晰
+ll // 不可接受
+for (int i = 0; i &amp;lt; max; ++i) // 可行
+&lt;/pre&gt;
+&lt;em&gt;我们可以给这些变量名加上前缀&quot;m&quot;吗？(注:只有成员变量才行)&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;每个类应该拥有自己单独的文件，除非跟另外的类关联度非常大或者代码量很小&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;设计指南&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;应该把初始化放在构造函数里面&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽可能多地使用const，包括变量和函数&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽量用传引用替代传值&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;调用标准库函数加上&quot;::&quot;前缀&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;强烈推荐使用c++风格，而不是c风格&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;对于STL容器，判断容器是否为空，使用empty()而不是检查size()是否为0&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;对于迭代器变量，使用++var，而不是var++&lt;br/&gt;
+&lt;em&gt;(注:印象中侯杰的stl源码分析中提到过，前置方式要效率高些)&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果基类中的函数带有virtual，子类中也应该带上&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;基本类型不要用缩写&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例10: 类型名&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+unsigned int // 可行
+uint // 不可以
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;用c++风格的头文件替代c风格&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例11: C++风格的头&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+#inclue &lt;cstring&gt; // 可行
+#include &amp;lt;string.h&gt; // 不可行
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽量使用C++标准库和STL函数，而不是C stdlib中的函数&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例12: 函数使用&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+// 可行
+ifstream fil;
+fil.open(&quot;filename.txt&quot;);
+fil.close();
+// 不可以
+FILE* fil = fopen(&quot;filename.txt&quot;, &quot;w&quot;);
+fclose(fil);
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;类中所有的变量都应该在构造函数中初始化一个合理值。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;没有必要在删除一个指针的时候做NULL检测，因为在C++中delete NULL是安全的&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例13: 删除指针&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+// 可行, delete NULL是安全的
+Val* ptrValue = 0;
+delete ptrValue;
+// 不可以，没有必要嘛
+if (ptrValue != NULL)
+  delete ptrValue;
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;0比NULL要好&lt;br/&gt;
+&lt;strong&gt;&lt;em&gt;示例14: 0更好&lt;/em&gt;&lt;/strong&gt;&lt;pre&gt;
+Val&lt;em&gt; ptrValue = 0; // 可行
+Val&lt;/em&gt; ptrValue = NULL; // 不可以
+&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;当一个成员指针被删除掉，应该赋0值&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;OGRE特殊指南&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用Ogre::String 取代 std::string或者其他字符串&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;em&gt;(注：初次翻译，不当之处还请指出)&lt;/em&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>Ogre分析之插件机制</title>
+    <link href="http://reedhong.github.com/blog/2012/07/18/ogre-plugin/"/>
+    <updated>2012-07-18T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/18/ogre-plugin</id>
+    <content type="html">&lt;p&gt;Ogre有良好的插件系统，能够方便地系统更换或添加一些功能组件。通过配置文件去驱动插件的加载，非常灵活。这种设计非常值得我们学习。为此深入地考察了一番Ogre插件系统的设计。&lt;/p&gt;
+
+&lt;h4&gt;1. 先看Plugin继承体系：&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/blog/ogre-plugin.jpg&quot; alt=&quot;ogre plugin&quot; /&gt;&lt;br/&gt;
+Plugin本身为一抽象类，定义了作为一个Plugin应该具备的一些基本接口&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;  
+class Plugin
+{  
+public:  
+    Plugin(){}  
+    ~Plugin(){}  
+    virtual const String&amp; getName() const = 0;   
+    virtual void install() = 0;  
+    virtual void initialise() = 0;  
+    virtual void shutdown() = 0;  
+    virtual void uninstall() = 0;  `  
+};  
+&lt;/pre&gt;
+
+
+&lt;p&gt;所有继承Plugin的类实现这些接口。我们来看GLPlugin一些接口的实现&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;  
+void GLPlugin::install()  
+{
+    mRenderSystem = new GLRenderSystem();   
+    // 加到Root的renders中  
+    Root::getSingleton().addRenderSystem(mRenderSystem);  
+}
+
+void GLPlugin::uninstall()
+{
+    delete mRenderSystem;
+    mRenderSystem = 0;
+}
+&lt;/pre&gt;
+
+
+&lt;h4&gt;2. 再看动态库的管理，重点看类:DynLib和DynLibManager&lt;/h4&gt;
+
+&lt;p&gt;DynLib封装了不同平台上动态库的操作，提供一致性的接口。可以理解为一种Adapter的设计模式。重点可以看其load和unload接口的实现，这里就不错具体的分析。&lt;br/&gt;
+DynLibManager把系统涉及到的所有DnyLib，通过一个Map管理起来。&lt;/p&gt;
+
+&lt;h4&gt;3. Root涉及插件加载的接口**&lt;/h4&gt;
+
+&lt;blockquote&gt;&lt;p&gt;// 通过dll，加载插件，此处其实是加载动态库，这个地方的命名有些问题。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;  
+void loadPlugin(const String&amp; pluginName)  
+{
+  DynLib* lib = DynLibManager::getSingleton().load( pluginName );  
+  DLL_START_PLUGIN pFunc = (DLL_START_PLUGIN)lib-&gt;getSymbol(&quot;dllStartPlugin&quot;);  
+  pFunc();  // 调用dll中的dllStartPlugin接口实现插件的安装  
+}
+
+// 通过dll，卸载插件  
+void unloadPlugin(const String&amp; pluginName);  
+{  
+  // Call plugin shutdown    
+  DLL_STOP_PLUGIN pFunc = (DLL_STOP_PLUGIN)(*i)-&gt;getSymbol(&quot;dllStopPlugin&quot;);  
+  // this must call uninstallPlugin  
+  pFunc();  
+  // Unload library (destroyed by DynLibManager)  
+  DynLibManager::getSingleton().unload(*i);  
+  mPluginLibs.erase(i);   
+}  
+
+// 安装和卸载插件  
+void installPlugin(Plugin* plugin)  
+{
+  // 加入到插件列表  
+  mPlugins.push_back(plugin);  
+  // 安装  
+  plugin-&gt;install();  
+
+  // if rendersystem is already initialised, call rendersystem init too  
+  // 初始化  
+  if (mIsInitialised)
+  {    
+     plugin-&gt;initialise();  
+  }
+ 
+}
+
+void uninstallPlugin(Plugin* plugin);  
+{  
+  if (mIsInitialised)  
+    plugin-&gt;shutdown();  
+  plugin-&gt;uninstall();  
+  mPlugins.erase(i);  
+}  
+&lt;/pre&gt;
+
+
+&lt;h4&gt;4. 然后看动态库的定义文件&lt;/h4&gt;
+
+&lt;p&gt;挑选RenderSystems/GL/src/OgreGLEngineDll.cpp文件分析：&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt; 
+extern &quot;C&quot; void _OgreGLExport dllStartPlugin(void) throw()  
+{  
+  plugin = new GLPlugin();  
+  Root::getSingleton().installPlugin(plugin);
+
+}
+
+extern &quot;C&quot; void _OgreGLExport dllStopPlugin(void)
+{
+  Root::getSingleton().uninstallPlugin(plugin);
+  delete plugin;
+}
+
+&lt;/pre&gt;
+
+
+&lt;p&gt;可以看出，也就是动态创建插件，然后调用Root的接口安装和卸载相应的接口
+根据上面的分析，我们在看动态库加载和静态库加载的全过程：&lt;/p&gt;
+
+&lt;h4&gt;1. 动态库加载&lt;/h4&gt;
+
+&lt;p&gt;主要是通过读入plugins.cfg的配置文件，依次加载进来&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt; 
+Root::Root()
+{
+ ...
+ // Load plugins
+if (!pluginFileName.empty())  
+  loadPlugins(pluginFileName);{  
+    // 1. 解析plugin配置文件(plugin.cfg)  
+    // 2. 依次加载插件  
+   for( StringVector::iterator it = pluginList.begin(); it != pluginList.end(); ++it )  
+   {  
+     loadPlugin(pluginDir + (*it));{  
+       
+     }  
+   }  
+  }  
+ ...
+}
+&lt;/pre&gt;
+
+
+&lt;h4&gt;2.静态库的加载&lt;/h4&gt;
+
+&lt;p&gt;在编译前需要修改编译参数，编译参数的修改在Ogre\include\OgreBuildSettings.h中，将#define OGRE_STATIC_LIB 打开。然后手动通过Root的installPlugin接口加载。我们可以看源码Samples\Browser\Android\project\jni\ogrewrapper.cpp中的代码&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;     
+ // Create a root object
+    g_root = OGRE_NEW Ogre::Root(&quot;&quot;, &quot;&quot;, &quot;&quot;);
+
+    // Register the ES2 plugin
+    g_gles2Plugin = OGRE_NEW Ogre::GLES2Plugin();
+    Ogre::Root::getSingleton().installPlugin(g_gles2Plugin);
+
+    // Register particle plugin
+    g_pfxPlugin = OGRE_NEW Ogre::ParticleFXPlugin();
+    Ogre::Root::getSingleton().installPlugin(g_pfxPlugin);
+&lt;/pre&gt;
+
+
+&lt;p&gt;通过上述方法即可。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>OpenGL中的VA和VBO</title>
+    <link href="http://reedhong.github.com/blog/2012/07/14/opengl-va-vbo/"/>
+    <updated>2012-07-14T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/14/opengl-va-vbo</id>
+    <content type="html">&lt;p&gt;二者算是OpenGL学习初期稍微复杂一点的概念。如果对顶点有正确的认识，掌握起来就容易多了。对于OpenGL不少高级技术，我们不仅仅需要知其然，更加需要知其所以然。这样更好地应用于实践之中。我们首先谈VA(Vertex Array, 顶点数组)。&lt;/p&gt;
+
+&lt;p&gt;在没有VA之前，比如我们需要绘制20条直线。&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+glBegin(GL_LINES);
+  glVertex2iv(p0);
+  ......
+  glVertex2iv(p20)
+glEnd();
+&lt;/pre&gt;
+
+
+&lt;p&gt;一共21次顶点提交。看着是不是有些浪费。还有如果绘制一个立方体，我们做裸奔的方式是啥呢？假设立方体的顶点为p1,...p8.我们可以有下面的绘制代码：&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+glBegin(GL_QUADS); // font
+  glVertex2iv(p0);
+  glVertex2iv(p1);
+  glVertex2iv(p2);
+  glVertex2iv(p3);
+glEnd();
+&lt;/pre&gt;
+
+
+&lt;p&gt;// 左侧，右侧，底，顶，背&lt;br/&gt;
+按照绘制前的方式依次绘制其他几个面，可以看出一共需要24此顶点提交，每个顶点被提交3次，看着也挺坑爹的。OpenGL图形绘制在设计时是非常讲究效率的。这个地方就需要去优化它，思路也很简单：减少调用，减少数据的提交。&lt;/p&gt;
+
+&lt;p&gt;这种优化的技术就是VA(Vertex Array)。程序预先把顶点相关的属性(可不只是坐标，具体见OpenGL中的顶点)放在一块数组里面，指定相关属性的指针，在渲染的时候，通过索引值，或者偏移进行一次性提交。具体使用过程包括：&lt;/p&gt;
+
+&lt;p&gt;(1) 激活相应属性的数组&lt;br/&gt;
+  glEnableClientState(GL_VERTEX_ARRAY);   // 坐标&lt;br/&gt;
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);  // 材质坐标&lt;br/&gt;
+ 注：从这个地方的接口名字也可以看出，OpenGL是在设置Client的状态， glEnable/glDisable是在设置Server的状态。类似于对应的接口在OpenGL中还不少。所以，OpenGL的CS架构要深刻理解。&lt;/p&gt;
+
+&lt;p&gt;(2) 指定数组的指针&lt;br/&gt;
+ glVertexPointer( 3, GL_FLOAT, sizeof( gl_vertecex[0] ), gl_vertecex );    glTexCoordPointer( 2, GL_FLOAT, sizeof( gl_texcoords[0] ), gl_texcoords );&lt;/p&gt;
+
+&lt;p&gt;(3) 引用和渲染&lt;br/&gt;
+glDrawElement(ith);  // 引用一个顶点
+glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indexArrays );  //  引用索引数组中的顶点
+glDrawArrays(GL_TRIANGLES, 0, 6); // 引用数组前6个顶点&lt;/p&gt;
+
+&lt;p&gt;具体的接口的参数说明，大家可以参考OpenGL红宝书。&lt;/p&gt;
+
+&lt;p&gt;弄清VA的技术背景是不是也挺容易理解的。但优化是无止境的，我们是否可以往前走得更远呢？OpenGL的CS架构让我们每次都需要从Client提交数据到Server，引入VA之后，只是改进了其提交的效率，提交的现状并没有改变，数据还是老老实实一直放在Client在。Server端每次被动地接受这些数据，数据其实一直没有变而已。&lt;/p&gt;
+
+&lt;p&gt;分析到这里，如果做过服务器开发或者web开发的同学就有会想到一个词：cache。数据都是一份，干嘛要每次提交，直接cache到服务端不就可以了。这种简单有效的优化思路就是我们的VBO(Vextex Buffer Object)技术。这样来看OpenGL中的一些技术名词就不在感到困惑，都有其存在的必然性。其使用过程可以简单描述如下：&lt;/p&gt;
+
+&lt;p&gt;初始化阶段：&lt;br/&gt;
+1. glGenBuffersARB(1, &amp;amp;nVBOVertices); //生成一个句柄&lt;br/&gt;
+2. glBindBufferARB(GL_ARRAY_BUFFER_ARB, nVBOVertices); //声明该句柄为一个vbo句柄，并选择之&lt;br/&gt;
+3. glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(vertices), vertices,GL_STATIC_DRAW); //将顶点集上传至server端&lt;/p&gt;
+
+&lt;p&gt;使用阶段：&lt;br/&gt;
+1. glEnableClientState(GL_VERTEX_ARRAY); //开始使用vbo
+2. glBindBufferARB(GL_ARRAY_BUFFER_ARB, nVBOVertices);  //选择当前使用的vbo&lt;br/&gt;
+3. glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));  //指定vbo顶点格式&lt;br/&gt;
+4. glDrawArrays( GL_TRIANGLES, 0, g_pMesh-&gt;m_nVertexCount ); //画吧&lt;br/&gt;
+5. glDisableClientState(GL_VERTEX_ARRAY);&lt;br/&gt;
+6. glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);&lt;br/&gt;
+收尾阶段：&lt;br/&gt;
+1. glDeleteBuffersARB(1,&amp;amp;nVBOVertices); //删除句柄，同时删除server端顶点缓冲&lt;/p&gt;
+
+&lt;p&gt;这样一个标准的创建，使用，释放，而且使用整数做句柄的过程其实也挺熟悉的。比如我们在Linux中创建一个文件，进程，socket等。这个过程也是OpenGL其他相关技术的标准过程。比如FBO，纹理映射。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>OpenGL中的顶点</title>
+    <link href="http://reedhong.github.com/blog/2012/07/14/open-vertex/"/>
+    <updated>2012-07-14T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/14/open-vertex</id>
+    <content type="html">&lt;p&gt;顶点(Vertex)在OpenGL占据中非常重要的地位。在开始学习OpenGL时，一直把顶点跟坐标(x, y, z)等同起来。这种认识导致后来对顶点数组技术的理解一直很差。随着学习的深入慢慢有了一些体会，跟大家分享。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;顶点是最基本的元素
+道德经中有：一生二二生三三生万物。 顶点就是OpenGL世界中的&quot;一&quot;，从中可以变幻出世界万物。首先所有的图元(Primitive)，比如线，三角形，四边形，多边形之类的，均有顶点构成。而很多立体的图形又有这些基本的图元构成。在视图变换中，我们也是在操作顶点。变换的本质就是把顶点转化为列矩阵(1x4)，然后跟各种变换矩阵相乘。在顶点变换完成之后，然后根据顶点对应的图元类型，进行顶点装配(Primitive Assembly)。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;顶点的属性
+初学OpenGL很快就会接触到&lt;strong&gt;&lt;em&gt;glVertex[234]{sifd}&lt;/em&gt;&lt;/strong&gt;这个API，去指定一个顶点。心中很容易就把坐标跟顶点一一对应起来。带着认识，看到顶点数组(Vertex Array)技术时，你会发现还牵扯到颜色数组，纹理坐标数组之类的，就开始混乱了。这个时候，我们必须去重新认识到，顶点不仅仅只是坐标。坐标只是顶点的一种属性。一个顶点还有颜色、纹理坐标、表面法线等(红宝书上说最多有8个)。这样来看VA技术就容易理解了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;...没有了， 暂时就这么多，欢迎大家补充&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+</entry>
+
+<entry>
+    <title>在Windows下开发OpenGL程序</title>
+    <link href="http://reedhong.github.com/blog/2012/07/06/opengl-windows/"/>
+    <updated>2012-07-06T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/07/06/opengl-windows</id>
+    <content type="html">&lt;p&gt;目前，我主要是用vs2008就行OpenGL的学习和开发。VS2008自带OpenGL的SDK，但版本非常低，据说是1.4的。很多高级一点的特性都会不支持不到，需要下载更新的SDK。要是不好找可以去：&lt;a href=&quot;http://115.com/file/beni10z5&quot;&gt;http://115.com/file/beni10z5&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;实际去写一个OpenGL的程序时，大致有三种方式：&lt;br/&gt;
+1. 采用OpenGL的glut库，它封装了不同窗口系统差异性。调用很少的一些接口和实现一些相应的回调函数，就可以，非常方便。OpenGL红宝书中的源码和不少图形学的书中均采用这种方式。所以，一般简单地学习OpenGL的API采用这种方法就要简单很多。&lt;/p&gt;
+
+&lt;p&gt;2.使用Win32程序。安装原生win32的方法去实现。OpenGL学习界最著名的教程NEHE中第一课对这种方式有详细的讲解。这种纯粹的Win32方法，对于实际的游戏开发很有借鉴意义。我们在开发基于OpenGL的游戏时，就是采用的这种方式。&lt;/p&gt;
+
+&lt;p&gt;3.在MFC中使用OpenGL。如果需要用MFC写一个基于OpenGL的场景编辑器之类的，这种方式的掌握就非常有必要了。其实，也很简单，可以见这里，是我搜集到得讲得最简单明白的教程。&lt;/p&gt;
+
+&lt;p&gt;可以看出，三种方式各有其适应场景，可以根据需要选择。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>Lua在武侠世界中的应用</title>
+    <link href="http://reedhong.github.com/blog/2012/03/24/lua-wuxia/"/>
+    <updated>2012-03-24T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/03/24/lua-wuxia</id>
+    <content type="html">&lt;p&gt;Lua应用于游戏之中早不是新鲜事情，但对于游戏新人的我，却充满好奇。正好武侠世界嵌入Lua，重点阅读了相关部分。&lt;/p&gt;
+
+&lt;p&gt;在阅读之前主要对下面个问题比较好奇：
+1. Lua跟C++如何混合编程？&lt;br/&gt;
+2. Lua主要用来做些什么事情？&lt;/p&gt;
+
+&lt;p&gt;云风在《C/C++ 与 Lua 的混合编程》中提到：嵌入还是扩展，这是一个问题。&lt;br/&gt;
+在武侠中，是采取嵌入的方式。通过LuaPlus将Lua嵌入到C++中。在C++中调用封装好的lua c api直接执行对应的Lua脚本。而为了方便Lua中调用C++，C++层做了大量的注册操作。由于所有的注册都是直接注入到Lua的global中，所以，我们只需要启动武侠客户端，在LuaObject LuaState::GetGlobals()实现处下一断点就可以观察所有的注册操作。按照代码运行顺序，为一下几个步骤：&lt;/p&gt;
+
+&lt;h2&gt;1.LuaPlus初始化虚拟机时注册的一些东西&lt;/h2&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;
+  ScriptFunctionsRegister( this );
+
+  GetGlobals().Register(&quot;LuaDumpGlobals&quot;, LS_LuaDumpGlobals);
+  GetGlobals().Register(&quot;LuaDumpObject&quot;, LS_LuaDumpObject);
+  GetGlobals().Register(&quot;LuaDumpFile&quot;, LS_LuaDumpFile);
+ }
+
+ GetGlobals().Register(&quot;LOG&quot;, LS_LOG);
+ GetGlobals().Register(&quot;_ALERT&quot;, LS_LOG);
+&lt;/pre&gt;
+
+
+&lt;h2&gt;2.注册Helper&lt;/h2&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;
+CHelperSystem::CHelperSystem() :
+ LuaExport&lt; &gt;(&quot;Helper&quot;) LuaExport(const char* pszName, LuaPlus::LuaState* pState = 0)
+{                        
+s_pMetaTable = new LuaPlus::LuaObject;
+s_pMetaTable = theState-&gt;GetGlobals().CreateTable(pszName); // Helper                        
+s_pMetaTable-&gt;SetObject(&quot;__index&quot;, *s_pMetaTable);                        
+LuaObject obj = theState-&gt;BoxPointer(s_pMe);                        
+obj.SetMetaTable(*s_pMetaTable);                        
+theState-&gt;GetGlobals().SetObject(pszName, obj);
+}                         
+&lt;/pre&gt;
+
+
+&lt;h2&gt;3. 注册Variable,用于访问系统的配置信息&lt;/h2&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;
+VOID CScriptSystem::Initial(VOID*)
+｛
+    // 注册大量跟游戏逻辑相关的函数和对象,均定义在SCRIPT_SANDBOX(沙箱)命名空间下面
+｝
+VOID CVariableSystem::LoadVariable(LPCTSTR szFileName, VARIABLE_MAP&amp; mapBuf)
+｛
+    m_pMetaTable = new LuaPlus::LuaObject;
+    *m_pMetaTable = CScriptSystem::GetMe()-&gt;GetLuaState()-&gt;GetGlobals().CreateTable(&quot;Variable&quot;);
+    m_pMetaTable-&gt;SetObject(&quot;__index&quot;, *m_pMetaTable);
+    ....
+    obj_Variable.SetMetaTable(*m_pMetaTable);
+  
+    CScriptSystem::GetMe()-&gt;GetLuaState()-&gt;GetGlobals().SetObject(&quot;Variable&quot;, obj_Variable);
+｝
+&lt;/pre&gt;
+
+
+&lt;h2&gt;4. 注册大量跟游戏逻辑相关的函数和对象&lt;/h2&gt;
+
+&lt;p&gt;比如：游戏中玩家的信息&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;
+VOID CScriptSystem::Initial(VOID*)
+{
+    // 注册大量跟游戏逻辑相关的函数和对象,均定义在SCRIPT_SANDBOX(沙箱)命名空间下面
+｝
+&lt;/pre&gt;
+
+
+&lt;h2&gt;5. UI控件相关&lt;/h2&gt;
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;
+void CGameUIScript::createBindings(void)
+｛
+    pLuaState-&gt;GetGlobals().Register(&quot;GetIconFullName&quot;, CUIIconsManager::LUA_GetIconFullName);
+    // Event参数
+    {
+        g_theUIEventArg.m_pMetaTable = new LuaPlus::LuaObject;
+        *(g_theUIEventArg.m_pMetaTable) = pLuaState-&gt;GetGlobals().CreateTable(&quot;CEGUIEventMetaTable&quot;);
+        g_theUIEventArg.m_pMetaTable-&gt;SetObject(&quot;__index&quot;, *(g_theUIEventArg.m_pMetaTable));
+
+        g_theUIEventArg.m_pMetaTable-&gt;RegisterObjectFunctor(&quot;GetValue&quot;, &amp;CEventArg::LUA_GetValue);
+
+        LuaObject obj_UIEvent = pLuaState-&gt;BoxPointer(&amp;(g_theUIEventArg));
+        obj_UIEvent.SetMetaTable(*(g_theUIEventArg.m_pMetaTable));
+        pLuaState-&gt;GetGlobals().SetObject(&quot;CEArg&quot;, obj_UIEvent);
+    }
+
+    //CUIWindowItem(this)
+
+    {
+        LuaObject metaUIWindowItem = pLuaState-&gt;GetGlobals().CreateTable(&quot;MetaTable_UIWindowItem&quot;);
+        metaUIWindowItem.SetObject(&quot;__index&quot;, metaUIWindowItem);
+    }
+
+    //控件, 只是注册控件的MetaTable: 有点像注册了一个类
+    {
+        LUA_CONTROL::Window::RegisterMetaTable();
+    }
+｝
+&lt;/pre&gt;
+
+
+&lt;h2&gt;&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;this指针：  ##&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;pre class=&quot;prettyprint lang-cpp&quot;&gt;
+    CUIWindowItem
+       //创建脚本运行环境
+            m_pScriptEnv = g_pScriptSys-&gt;NewEnvironment(m_strWindowName.c_str(), m_strScriptFileName.c_str());{
+          // 创建一个对应环境的table
+          }
+
+            //---------------------------------------
+            //注册引用函数
+
+            //注册&quot;this&quot;对象
+            LuaObject metaUIWindowItem = g_pScriptSys-&gt;GetLuaState()-&gt;GetGlobals().GetByName(&quot;MetaTable_UIWindowItem&quot;);
+
+            LuaObject objThis = g_pScriptSys-&gt;GetLuaState()-&gt;BoxPointer(this);
+            objThis.SetMetaTable(metaUIWindowItem);
+            m_pScriptEnv-&gt;GetLuaObject()-&gt;SetObject(&quot;this&quot;, objThis);
+
+&lt;/pr&gt;
+
+
+
+</content>
+</entry>
+
+<entry>
+    <title>Lua学习小记</title>
+    <link href="http://reedhong.github.com/blog/2012/02/29/lua-study/"/>
+    <updated>2012-02-29T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2012/02/29/lua-study</id>
+    <content type="html">&lt;p&gt;作为一名游戏开发人员，都不能免俗地想打造一个自己的游戏引擎。现如今，游戏引擎不支持脚本引擎好像都说不过去。虽然Python也可作为游戏脚本，但对于手机游戏开发，嵌入这么个脚本引擎未免显得太重了写。所以，也开始折腾了起Lua的东西。&lt;/p&gt;
+
+&lt;p&gt;这里有有些参考资料，总结得不错，供大家参考。&lt;/p&gt;
+
+&lt;p&gt;作为游戏中的脚本引擎，其实关键是要弄明白c/c++和Lua之间如何互相调用(即弄清楚Lua C API)。大致弄清楚下面几个问题，就好说了。&lt;/p&gt;
+
+&lt;p&gt;c--&gt;lua
+1. c执行lua脚本  &lt;br/&gt;
+2. c访问lua中的变量&lt;br/&gt;
+3. c调用lua中的函数&lt;/p&gt;
+
+&lt;p&gt;lua--&gt;c
+1. 把c中的函数注册到lua中去&lt;br/&gt;
+2. 把c中的变量扔到lua中去。&lt;/p&gt;
+
+&lt;p&gt;网上有不少的相关代码，可以去查看。比如&lt;a href=&quot;http://www.cppblog.com/flyindark/archive/2011/07/01/149937.html&quot;&gt;这里&lt;/a&gt;，还有&lt;a href=&quot;http://www.cppblog.com/makiv/archive/2008/01/11/40980.html&quot;&gt;这里&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;这些代码初次读起来非常痛苦。重点理解下面几个概念：&lt;br/&gt;
+1.在Lua中，基本数据：nil, boolean, number, string, userdata, function, thread, and table。都是有一个结构来表示。函数也是一种数据，可以被复制和传递等。&lt;br/&gt;
+2.运行时一般有一个lua_state,作为一个运行状态，存储了当前的所有的全局变量(不仅仅是数据，函数也有)和栈。&lt;br/&gt;
+3.Lua和c之间的交互是通过对栈进行操作来实现的 lua的栈类似于以下的定义, 它是在创建lua_State的时候创建的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    TValue stack[max_stack_len]  // 欲知内情可以查 lstate.c 的stack_init函数
+存入栈的数据类型包括数值, 字符串, 指针, talbe, 闭包等。  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;大量的API操作都是在对栈进行读取或者设置数据，隐含有栈顶的变化，这点一定要把握住，不然代码看着就晕眩的。关于Lua API的东西，这篇文档总结的不错。&lt;/p&gt;
+
+&lt;p&gt;大致这么多，后面会讨论关于如何用luaplus在c++中嵌入lua。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>libvirt 错误FAQ</title>
+    <link href="http://reedhong.github.com/blog/2011/08/03/libvirt-faq/"/>
+    <updated>2011-08-03T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/08/03/libvirt-faq</id>
+    <content type="html">&lt;p&gt;【Q】:hack 的时候出现编译错误：../src/.libs/libvirt_driver_lxc.a(libvirt_driver_lxc_la-lxc_driver.o): In function &lt;code&gt;lxcSetSchedulerParameters':  
+lxc/lxc_driver.c:2326: undefined reference to&lt;/code&gt;virCgroupSetCpuSet'
+【A】: libvirt在这个地方的处理非常奇怪，需要去src/底下，在对应的*.syms添加相应的接口声明&lt;/p&gt;
+
+&lt;p&gt;【Q】: hack添加新接口会出现：libvirt.c:1648: warning: no previous prototype for 'virNodeGetStats' [-Wmissing-prototypes]&lt;br/&gt;
+【A】: 在include/libvirt底下， libvirt.h是根据libvirt.h.in生成的，所以，扩展新的接口时，不要忘记往.in里面添加&lt;/p&gt;
+
+&lt;p&gt;【Q】: Result status 0, stdout: '' stderr: 'INFO   in start_domain, domain suse existed
+【A】: 配置文件中指定的模板文件存在问题&lt;/p&gt;
+
+&lt;p&gt;【Q】：在mount的时候可能会出现：
+mount -o loop /data/domains/lxc5.img /data/domains/lxc5
+mount: could not find any free loop device&lt;br/&gt;
+【A】：这是因为max_loop默认只有8，太小&lt;/p&gt;
+
+&lt;p&gt;【Q】：umount: /data/domains/vm4: device is busy&lt;br/&gt;
+【A】：手工杀死:/usr/libexec/libvirt_lxc --name lxc1 --console 13 --background --veth veth8
+类似的文件会导致这个虚拟机引导的init进程和init引导出的其他进程还在系统中。所以，必须kill掉这些进程才行&lt;/p&gt;
+
+&lt;p&gt;【Q】: 启动vm或者停止vm的时候，会导致客户端的ssh卡死。&lt;br/&gt;
+【A】: 虚拟机的init启动新的sshd出现的&lt;/p&gt;
+
+&lt;p&gt;【Q】： 虚拟机中的/dev/ptx/ptmx 无法删除&lt;br/&gt;
+【A】：
+mount |grep lxc5
+fuser -mu  suse1/
+lsof -w suse1&lt;/p&gt;
+
+&lt;p&gt;【Q】： mount -o loop /&lt;strong&gt; /&lt;/strong&gt; 提示失败&lt;br/&gt;
+【A】： max_loop 默认最大值为8，需要增加这个默认值的大小&lt;/p&gt;
+
+&lt;p&gt;【Q】: 设置cgroup的内存参数的时候可能是失败，报错：&lt;br/&gt;
+【A】：这是由于memory.memsw.limit_in_bytes, memory.limit_in_bytes大小有关联。memory.limit_in_bytes不能大于memory.memsw.limit_in_bytes， memory.memsw.limit_in_bytes不能小于memory.limit_in_bytes。所以，在设置新内存值的时候需要注意设置的顺序。比较新值跟老值之间的关系&lt;/p&gt;
+
+&lt;p&gt;【Q】：启动libvirtd报错: initialization failed&lt;br/&gt;
+【A】：字符编码出错 export LC_ALL=POSIX&lt;/p&gt;
+
+&lt;p&gt;【Q】：启动虚拟机，日志不断报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 13:24:10.986: 28595: error : lxcFdForward:309 : read of fd 7 failed: Input/output error  
+ cpu占有100%， 而且，list 的状态是处于运行中。  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;【A】&lt;/p&gt;
+
+&lt;p&gt;【Q】:在虚拟机中创建设备出错&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; mknod loop0 b 7 0       
+ mknod: `loop0': Operation not permitted  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;【A】:需要设置cgroup中设备的值： echo a &lt;em&gt;:&lt;/em&gt; rw &gt; devices.allow&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>libvirt hooks 机制</title>
+    <link href="http://reedhong.github.com/blog/2011/08/01/libvirt-hook/"/>
+    <updated>2011-08-01T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/08/01/libvirt-hook</id>
+    <content type="html">&lt;p&gt;参考：&lt;a href=&quot;http://libvirt.org/hooks.html&quot;&gt;http://libvirt.org/hooks.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;说明：&lt;/h2&gt;
+
+&lt;p&gt;libvirt从0.8.0开始，支持某些特定行为触发用户自定义搅拌的机制。目前脚本hook，主要在下面的一些行为产生是触发：  &lt;br/&gt;
+1. libvirt daemon 启动，停止和重新reload时&lt;br/&gt;
+2. qemu guest 启动或者停止时&lt;br/&gt;
+3. lxc guest 启动或者停止时&lt;/p&gt;
+
+&lt;h2&gt;脚本位置：&lt;/h2&gt;
+
+&lt;p&gt;$SYSCONFDIR/libvirt/hooks/。 一般在 /etc/libvirt/hooks/&lt;br/&gt;
+定义在src/util/hooks.c:48 &lt;br/&gt;
+#define LIBVIRT_HOOK_DIR SYSCONFDIR &quot;/libvirt/hooks&quot;&lt;/p&gt;
+
+&lt;h2&gt;脚本的名字：&lt;/h2&gt;
+
+&lt;p&gt;/etc/libvirt/hooks/daemon&lt;br/&gt;
+/etc/libvirt/hooks/qemu&lt;br/&gt;
+/etc/libvirt/hooks/lxc&lt;/p&gt;
+
+&lt;h2&gt;脚本参数：&lt;/h2&gt;
+
+&lt;p&gt;lxc中：&lt;br/&gt;
+/etc/libvirt/hooks/lxc guest_name start begin -&lt;br/&gt;
+/etc/libvirt/hooks/lxc guest_name stopped end -&lt;br/&gt;
+另外，stdin中传入domain的xml格式的内容。比如通过python这样可以获得：&lt;br/&gt;
+xml = sys.stdin.read()&lt;br/&gt;
+非常方便&lt;/p&gt;
+
+&lt;h2&gt;脚本执行：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;start操作：先执行脚本，在执行其他libvirt的操作。所以，如果脚本出现错误，启动就失败&lt;/li&gt;
+&lt;li&gt;shutdown操作：先执行正常libvirt操作，在执行脚本，所以，脚本出错不影响&lt;/li&gt;
+&lt;li&gt;脚本同步执行&lt;/li&gt;
+&lt;li&gt;脚本需要rx属性&lt;/li&gt;
+&lt;li&gt;加入新的脚本需要重启libvirt&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;h2&gt;返回值和日志：&lt;/h2&gt;
+
+&lt;p&gt;如果一个脚本返回0，则认为执行成功，并不记录日志。当返回非0时，则标识失败。如果256还会记录日志。
+日志记录搅拌输出到stderr的值&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>libvirt中CPU和内存的细粒度管理机制</title>
+    <link href="http://reedhong.github.com/blog/2011/07/29/lxc-memory-cpu/"/>
+    <updated>2011-07-29T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu</id>
+    <content type="html">&lt;h1&gt;内存&lt;/h1&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+struct _virDomainDef {
+     ...
+    struct {
+        unsigned long max_balloon;  
+        unsigned long cur_balloon;  
+        unsigned long hugepage_backed;
+        unsigned long hard_limit;
+        unsigned long soft_limit;
+        unsigned long min_guarantee;
+        unsigned long swap_hard_limit;
+    } mem;
+    ...
+}
+&lt;/pre&gt;
+
+
+&lt;h2&gt;选项：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;hard_limit：  ---&gt; memory.limit_in_bytes
+it represents the maximum memory the guest can use.
+guest能使用的最大内存&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;soft_limit  ---&gt; memory.soft_limit_in_bytes
+it represents the memory upper limit enforced during memory contention.
+内存紧张时的保证。
+比如：1G内存的物理主机，我们分配两个虚拟机器，设置hard_limit均为600M。但这样如果在资源紧张时就傻逼了。
+需要设置soft_limit=500M，保证最多只有这么多内存可被用。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;min_guarantee ---&gt;
+it represents the minimum  memory guaranteed to be reserved for the guest
+注：lxc未设置这个&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;swap_hard_limit  ---&gt; memory.memsw.limit_in_bytes
+it represents the maximum swap plus memory the guest can use. This limit has to be more than&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;h2&gt;接口：&lt;/h2&gt;
+
+&lt;p&gt;virDomainSetMemoryParameters： &lt;br/&gt;
+virDomainGetMemoryParameters&lt;br/&gt;
+lxc实现： lxcDomainSetMemoryParameters lxcDomainGetMemoryParameters{&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 根本不同的参数，设置或者获取hard_limit, soft_limit, swap_hard_limit  的值  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;virDomainSetMemory:(不停用虚拟机的情况下动态增加内存的使用值)&lt;br/&gt;
+Dynamically change the target amount of physical memory allocated to a domain.&lt;br/&gt;
+在lxc的实现中，就是设置：memory.limit_in_bytes的值，跟hard_limit一致&lt;/p&gt;
+
+&lt;p&gt;virDomainSetMaxMemory:&lt;br/&gt;
+Dynamically change the maximum amount of physical memory allocated to a domain&lt;br/&gt;
+在lxc的实现中&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+lxcDomainSetMaxMemory{ // 这个地方跟接口语义不太符合
+    if (newmax &lt; vm-&gt;def-&gt;mem.cur_balloon) {
+        lxcError(VIR_ERR_INVALID_ARG,
+                         &quot;%s&quot;, _(&quot;Cannot set max memory lower than current memory&quot;));
+        goto cleanup;
+    }
+
+    vm-&gt;def-&gt;mem.max_balloon = newmax; // 这个值没有回写到cgroup中，而是用来在lxcDomainSetMemory中作做判断用
+}
+&lt;/pre&gt;
+
+
+&lt;p&gt;xml中的配置选项：&lt;/p&gt;
+
+&lt;p&gt;`  &lt;memory&gt;286954&lt;/memory&gt; 这个参数必须有，不然启动不成功    &lt;br/&gt;
+  &lt;memtune&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;hard_limit&amp;gt;1048576&amp;lt;/hard_limit&amp;gt;  
+&amp;lt;soft_limit&amp;gt;131072&amp;lt;/soft_limit&amp;gt;  
+&amp;lt;swap_hard_limit&amp;gt;2097152&amp;lt;/swap_hard_limit&amp;gt;  
+&amp;lt;min_guarantee&amp;gt;65536&amp;lt;/min_guarantee&amp;gt; #对lx无效  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  &lt;/memtune&gt;`&lt;/p&gt;
+
+&lt;p&gt;lxc相关：&lt;br/&gt;
+我们直接用virDomainSetMemoryParameters来控制参数， virDomainSetMemory之类不好用。&lt;/p&gt;
+
+&lt;p&gt;总结：lxc中需要配置的参数：&lt;br/&gt;
+hard_limit，soft_limit，swap_hard_limit   &lt;br/&gt;
+可以通过virDomainSetMemory动态增加内存，但增加不能超过max_balloon的值，所以，当增加的内存指超过max_balloon的时候，需要先调用virDomainSetMaxMemory增加内存，然后再调用virDomainSetMemory&lt;/p&gt;
+
+&lt;p&gt;Python接口：&lt;/p&gt;
+
+&lt;h1&gt;CPU&lt;/h1&gt;
+
+&lt;p&gt;CGROUP主要设置参数
+cpu.shares
+cpuset.cpus&lt;/p&gt;
+
+&lt;p&gt;选项：&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+struct _virDomainDef {
+    unsigned short vcpus;
+    unsigned short maxvcpus;
+    int cpumasklen;
+    char *cpumask;
+
+    struct {
+        unsigned long shares;
+        int nvcpupin;
+        virDomainVcpupinDefPtr *vcpupin;
+    } cputune;
+}
+&lt;/pre&gt;
+
+
+&lt;p&gt;相关接口：&lt;/p&gt;
+
+&lt;p&gt;_virSchedParameter&lt;br/&gt;
+virDomainGetSchedulerParameters&lt;br/&gt;
+virDomainSetSchedulerParameters&lt;/p&gt;
+
+&lt;p&gt;Python接口：&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+virDomainGetMaxVcpus()：
+virDomainSetVcpus()
+virDomainGetVcpusFlags/virDomainSetVcpusFlags()
+virDomainPinVcpu()
+&lt;/pre&gt;
+
+
+&lt;p&gt;以上接口lxc均已实现&lt;/p&gt;
+
+&lt;p&gt;xml中的配置选项：&lt;br/&gt;
+`  &lt;cputune&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;vcpupin vcpu=&quot;0&quot; cpuset=&quot;1-4,^2&quot;/&amp;gt;  
+&amp;lt;vcpupin vcpu=&quot;1&quot; cpuset=&quot;0,1&quot;/&amp;gt;  
+&amp;lt;vcpupin vcpu=&quot;2&quot; cpuset=&quot;2,3&quot;/&amp;gt;  
+&amp;lt;vcpupin vcpu=&quot;3&quot; cpuset=&quot;0,4&quot;/&amp;gt;  
+&amp;lt;cpushares&amp;gt;2048&amp;lt;/cpushares&amp;gt;   
+ /*应该是shares，而不是cpushares (virXPathULong(&quot;string(./cputune/shares[1])&quot;, ctxt, 文档中这个地方时有错误的*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  &lt;/cputune&gt;`&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>libvirt中API的扩展</title>
+    <link href="http://reedhong.github.com/blog/2011/07/29/libvirt-python-api-exten/"/>
+    <updated>2011-07-29T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/07/29/libvirt-python-api-exten</id>
+    <content type="html">&lt;h1&gt;步骤&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;定义public API
+  docs/libvirt-api.xml 语言绑定的时候需要用到(TODO)
+  docs/schemas/domain.rng
+  docs/formatdomain.html.in
+  include/libvirt/libvirt.h.in  (非常重要)
+  src/libvirt_public.syms(这个是干嘛用的？没看出来， 非常重要，不然会出现变异错误)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;定义internal API
+  在src/driver.h 中增加对于的接口函数，并把对于的接口加入到其他需要支持的drivers中区。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;实现public API
+  src/libvirt.c 中实现总的，其他drivers实现具体的及细节,如：&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;实现remote protocol
+  rpc修改，涉及到三处改动：&lt;br/&gt;
+  1) 修改协议：src/remote/remote_protocol.x。修改完之后需要make -C src rpcgen生产对于的rpc相关文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   (1) 为每个新接口定义两个结构体。一个用来描述参数的，一个用来描述返回值  
+   (2) add values to the remote_procedure enum for each new function added to the API.  
+   然后运行 make rpcgen.生成新的下列文件：
+   daemon/remote_dispatch_args.h daemon/remote_dispatch_prototypes.h           daemon/remote_dispatch_table.h src/remote/remote_protocol.c src/remote/remote_protocol.h
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  2) remote客户端的实现： src/remote/remote_driver.c
+  3) 增加是服务端的实现： daemon/remote.c
+  4) 修改remote_protocol-structs 文件&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在test中实现具体的定义，用于virsh测试&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;修改virsh，增加命令接口&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在某个driver上写上具体的接口，比如lxc的：src/lxc/lxc_driver.c&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+</entry>
+
+<entry>
+    <title>测试虚拟机CPU资源分配</title>
+    <link href="http://reedhong.github.com/blog/2011/07/13/vm-cpu-allocate/"/>
+    <updated>2011-07-13T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate</id>
+    <content type="html">&lt;p&gt;测试虚拟机CPU资源分配&lt;/p&gt;
+
+&lt;h2&gt;说明：&lt;/h2&gt;
+
+&lt;p&gt;本测试主要想验证cgroup技术对于cpu资源的分配和占用的情况，验证一些理论上的想法。&lt;/p&gt;
+
+&lt;h2&gt;测试环境：&lt;/h2&gt;
+
+&lt;p&gt;物理机：
+CPU 8核 Intel(R) Xeon(R) CPU X3440  @ 2.53GHz&lt;br/&gt;
+内存 8G
+虚拟机：domain1, domain2. 二者的cpu资源通过管理平台动态调整&lt;/p&gt;
+
+&lt;p&gt;测试方法：
+我们在domain1上跑apache webserver，在另外一台物理主机上通过ab，测试apache的性能参数，通过这个观测虚拟机的性能。或者跑死循环，对比cpu的情况&lt;/p&gt;
+
+&lt;h2&gt;测试场景：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;domain1独占1个cpu
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu
+2) 平均请求数：9100 req/s&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain1独占2个cpu
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu。而且是平均分配到指定的CPU上
+2) 平均请求数：10500 req/s
+注：这里请求数并没有出现随着cpu个数而线性增长的情况，主要受限于我们在单点做压力测试，每个CPU的消耗还只有一半而已。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain1独占3个cpu
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu。cpu占用有两个差不多，另外一个明显要少。不够均衡
+2) 平均请求数：11000 req/s&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain1，domain2共同占用1个cpu，各占用50%, domain2闲置
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu。
+2) 平均请求数：92000 req/s。
+这个说明domain2的cpu分配了不用的话，domain1毫不客气地拿过来用。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain1，domain2共同占用1个cpu，各占用50%, 二者均跑死循环
+我们直接才python终端运行死循环程序。可以看到如下cpu占用情况 二者均占用50%的cpu。表现完美！&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain1，domain2共同占用1个cpu，分别占用80%, 20%, 二者均跑死循环
+我们在5的基础上修改二者cpu的占用情况，发现占用变成下面的情况：79%, 20%表现也几近完美！&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain1，domain2共同占用0.5个cpu，分别占用30%, 20%, 二者均跑死循环
+表现情况为60%, 40%.可以看到，在另外0.5的cpu闲置的情况下，domain1和domain2其实是按照占用比例把单个cpu完全瓜分。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;h2&gt;总结：&lt;/h2&gt;
+
+&lt;p&gt;从上面的各种测试场景我们很欣喜地看到，cgroup在cpu资源的分配上非常灵活和高效，完全符合我们的预期。总结一下包括下面一些功能&lt;br/&gt;
+1. 支持动态修改。在修改cpu.shares后，可以看到资源的占用立刻发生变化。&lt;br/&gt;
+2. 良好的细粒度支持。设置好cpu.shares我们可以让一个cpu被任意个虚拟机占用&lt;br/&gt;
+3. 支持overbook。虽然只分配一部分cpu。但如果别人不用，我就抢过来用，闲着也是闲着。很好的特性。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>如何将gbk版本discuz转为化为utf-8版本？</title>
+    <link href="http://reedhong.github.com/blog/2011/05/31/discuz-gbk2utf8/"/>
+    <updated>2011-05-31T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/05/31/discuz-gbk2utf8</id>
+    <content type="html">&lt;p&gt;面临的问题是：现有的discuz是gbk版本的，数据库采用的latin1，围绕其的ucenter，uchome均采用这种编码格式。由于业务出现其他变动，不得不将整个转为化utf-8编码的。包括程序和底层数据库。&lt;/p&gt;
+
+&lt;p&gt;初看挺简单的问题。数据库大不了把数据通过mysqldump出来，然后转码,  最后直接mysql &amp;lt;**.sql 导入即可。程序下载一个新的编码软件安装下就可以。&lt;/p&gt;
+
+&lt;p&gt;针对第一个问题，网上有很多的解决方案，典型的列举几处：
+&lt;a href=&quot;http://www.oicto.com/2011/05/mysql-latin1-utf-8/&quot;&gt;http://www.oicto.com/2011/05/mysql-latin1-utf-8/&lt;/a&gt;&lt;br/&gt;
+&lt;a href=&quot;http://en.gentoo-wiki.com/wiki/Convert_latin1_to_UTF-8_in_MySQL&quot;&gt;http://en.gentoo-wiki.com/wiki/Convert_latin1_to_UTF-8_in_MySQL&lt;/a&gt;&lt;br/&gt;
+尝试了他们的方法。由于数据有点大，2G多一点，中间会出现各种乌七八糟的错误。类似于某个命令有误或者辛辛苦苦转入结果却是乱码，非常让人揪心。&lt;/p&gt;
+
+&lt;p&gt;最后只好写了一个python的小脚本，来做这个事情。非常好使。Python在干这种脏活方面非常擅长。而且，在编码处理方面也很清晰。可以很容易看出文件的编码以及在不同的编码中进行转换。具体的代码见&lt;a href=&quot;http://cid-b6fcdff192837794.office.live.com/self.aspx/.Public/source/python/iconv%5E_dir.py&quot;&gt;convert_data.py&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;另外是程序库的转码问题。由于在后续的运营中，discuz的代码以及经过不少的修改和二次开发。重新下载utf-8版本的显然是非常不现实的。所以，又写了一个python脚本进行程序的转码，具体的转码工作直接调用iconv命令。而且还需要区分文件格式。向图片这种就不需要转码了。其中用到python提供的walk接口。非常好用，提供遍历一个目录中所有文件的方法。是处理类似问题的利器。具体的脚本见&lt;a href=&quot;http://cid-b6fcdff192837794.office.live.com/self.aspx/.Public/source/python/iconv%5E_dir.py&quot;&gt;iconv_dir.py&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Python&lt;/strong&gt;的强大之处每每在这种时刻体现出来。建议大家都去学学，不无裨益。&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>虚拟机测试框架</title>
+    <link href="http://reedhong.github.com/blog/2011/03/17/vm-test-framework/"/>
+    <updated>2011-03-17T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/03/17/vm-test-framework</id>
+    <content type="html">&lt;p&gt;虚拟机的解决方案各有千秋，在技术选型上，就需要好好进行测试，在这里大致给出一个测试框架出来，希望对大家在技术选型的时候有所帮助&lt;/p&gt;
+
+&lt;h1&gt;1. 系统性能测试&lt;/h1&gt;
+
+&lt;h2&gt;1.1 综合测试&lt;/h2&gt;
+
+&lt;p&gt;采用UnixBench，具体参考http:// code.google.com/p/byte-unixbench/
+是一个系统基准测试工具，不是CPU、RAM或者磁盘基准测试工具。 结果不仅依靠您的硬件，还要依靠您的操作系统，库甚至编译器。主要测试参数如下：&lt;br/&gt;
+Dhrystone&lt;br/&gt;
+该测试用于衡量字符串操作性能，不涉及浮点运算。该测试由Reinhold Weicker在1984年开发，它很大程度上受到软硬件设计、编译器和连接器参数、代码优化、缓存和整型类型的影响。&lt;/p&gt;
+
+&lt;p&gt;Whetstone
+该测试用于衡量浮点运算的效率和速度。测试由多个科学计算混合而成，其中的C程序包括sin、cons、sqrt、exp和log，以及整数和浮点数运算、数组操作、条件判断和过程调用，同时测试整数和浮点运算性能。&lt;/p&gt;
+
+&lt;p&gt;Execl Throughput
+该测试用于衡量每秒钟调用execl()的次数。execl()是exec函数簇的一部分，它用一个新的进程映像替换当前的进程映像。它和许多其他类似的函数都用作execve()的前端。&lt;/p&gt;
+
+&lt;p&gt;File Copy
+该测试用于衡量文件操作性能。它从文件中读取或写入不同大小的buffer，并且测试一定时间内（默认10秒）文件的读写和复制性能。&lt;/p&gt;
+
+&lt;p&gt;Pipe Throughput
+该测试用于衡量管道吞吐性能。管道是进程间通信最简单的一种方式，管道吞吐量是一个进程写512bytes到管道并读取出来的次数。管道吞吐量测试并不对应真实的应用。&lt;/p&gt;
+
+&lt;p&gt;Pipe-based Context Switching
+该测试用于衡量基于管道的上下文切换性能。两个进程通过一个管道传递一个自增整数，该测试类似一个真实的应用，测试程序创建一个子进程，它们之间通过管道通信。&lt;/p&gt;
+
+&lt;p&gt;Process Creation
+该测试用于衡量fork()性能。在一定的时间内，一个进程可以创建并回收子进程的次数。子进程创建涉及内存分配和内存带宽。通常，该基准测试用于比较不同平台下的进程创建性能。&lt;/p&gt;
+
+&lt;p&gt;Shell Scripts
+该测试用于衡量脚本运行性能。在一定时间内，一个进程可以创建一组1、2、4、8个并发shell脚本的次数，脚本中包含一组文件操作。&lt;/p&gt;
+
+&lt;p&gt;System Call Overhead
+该测试用于衡量系统调用负载性能。测试进入和离开内核态的花销，由一组简单的重复系统调用getpid()构成。&lt;/p&gt;
+
+&lt;p&gt;测试完成成后最初会给某个基准值相比，得出一个总的评分。&lt;/p&gt;
+
+&lt;h2&gt;1.2 CPU测试&lt;/h2&gt;
+
+&lt;p&gt;直接使用time tar jxvf linux-2.6.32.11.tar.bz2，观察整个解包时间&lt;/p&gt;
+
+&lt;h2&gt;1.3 IO测试&lt;/h2&gt;
+
+&lt;p&gt;1) 采用dd直接读写大文件&lt;br/&gt;
+写：dd if=/dev/zero of=test bs=1M count=4000&lt;br/&gt;
+读：dd of=/dev/zero if=test bs=1M count=4000&lt;br/&gt;
+2) 采用iozone，对文件的各种读写进行全面测试。&lt;/p&gt;
+
+&lt;h2&gt;1.4 网络测试&lt;/h2&gt;
+
+&lt;p&gt;采用测试工具：netperf。参考：www.netperf.org/netperf/  netperf可测试TCP和UDP吞吐已经应答效率。常用命令如下：
+TCP并发：netperf -H 192.168.254.138 -t TCP_STREAM -l 60&lt;br/&gt;
+UDP并发：netperf -H 192.168.254.138 -t UDP_STREAM -l 60 -- -m 64&lt;br/&gt;
+TCP应答：netperf -H 192.168.254.138 -t TCP_RR -l 60 -- -r 64,1024  &lt;br/&gt;
+UDP应答：netperf -H 192.168.254.138 -t UDP_RR -l 60 -- -r 64,1024&lt;/p&gt;
+
+&lt;p&gt;说明：由于我们测试系统是windows下基于VMware的虚拟机，所以，没法直接对比虚拟机的性能。所以，我们做系统测试偏重于测试性能的损耗。也就是在用虚拟机和不用虚拟机的情况下，同样的系统配置，各种性能的偏差是多少。&lt;/p&gt;
+
+&lt;h1&gt;2 隔离功能测试&lt;/h1&gt;
+
+&lt;p&gt;虚拟机的最大好处在隔离。虽然在同一个物理主机下，但不同虚拟机中的进程相互不会产生影响。&lt;/p&gt;
+
+&lt;h2&gt;2.1 内存隔离&lt;/h2&gt;
+
+&lt;p&gt;测试方法：写一个内存分配程序，不断地吃掉内存。大致代码如下&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint lang-c&quot;&gt;
+    char *p = NULL;
+    while(1){
+        p = (char *)malloc(sizeof(char)*BLOCK_SIZE);
+        memset(p, 0, BLOCK_SIZE);
+        sleep(1);
+    }   
+&lt;/pre&gt;
+
+
+&lt;p&gt;观察进程是否挂掉。&lt;/p&gt;
+
+&lt;h2&gt;2.2 CPU隔离&lt;/h2&gt;
+
+&lt;p&gt;测试方法：写一个死循环程序，放在VPS里面。观察CPU占用情况。&lt;/p&gt;
+
+&lt;h2&gt;2.3 DISK隔离&lt;/h2&gt;
+
+&lt;p&gt;测试方法：dd一个超出大小的文件，观察是否报错&lt;/p&gt;
+
+&lt;h1&gt;3 隔离性能测试&lt;/h1&gt;
+
+&lt;p&gt;主要采取的方法：在同一物理主机上部署N台虚拟主机，然后在其中一台做不同的压力测试(),观察是否其他虚拟主机有影响。为了能够对影响程度有一个量化。我们可以具体在每台虚拟机上跑以一个应用程序，观察应用程序性能变化。&lt;br/&gt;
+参考论文：&lt;a href=&quot;http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf&quot; title=&quot;http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf&quot;&gt;http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf&lt;/a&gt;&lt;/p&gt;
+</content>
+</entry>
+
+<entry>
+    <title>Libvirt介绍</title>
+    <link href="http://reedhong.github.com/blog/2011/03/14/lxc-introduction/"/>
+    <updated>2011-03-14T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/03/14/lxc-introduction</id>
+    <content type="html">&lt;h4&gt;1. 什么是libvirt？####&lt;/h4&gt;
+
+&lt;p&gt;虚拟云实现的三部曲：虚拟化技术实现--&gt;虚拟机管理--&gt;集群资源管理(云管理)。各种不同的虚拟化技术都提供了基本的管理工具。比如，启动，停用，配置，连接控制台等。这样在构建云管理的时候就存在两个问题：&lt;br/&gt;
+1) 如果采用混合虚拟技术，上层就需要对不同的虚拟化技术调用不同管理工具，很是麻烦。&lt;br/&gt;
+2) 虚拟化技术发展很迅速，系统虚拟化和容器虚拟化均在发展和演化中。可能有新的虚拟化技术更加符合现在的应用场景，需要迁移过去。这样管理平台就需要大幅改动。使之适应这种变化。&lt;br/&gt;
+为了适应变化，我们惯用的手段是分层，使之相互透明，在虚拟机和云管理中设置一个抽象管理层。libvirt就是扮演的这个角色。有了它，上面两个问题就迎刃而解。libvirt提供各种API，供上层来管理不同的虚拟机。&lt;/p&gt;
+
+&lt;h4&gt;2. 支持虚拟机&lt;/h4&gt;
+
+&lt;p&gt;目前支持的虚拟化技术包括：Xen,QEMU,KVM,LXC,OpenVZ, User Mode Linux, VirtualBox, VmWare ESX and GSX, VMware Workstation and Player。可以说是非常丰富，主流的虚拟化技术都包含了。&lt;/p&gt;
+
+&lt;h4&gt;3. 语言绑定&lt;/h4&gt;
+
+&lt;p&gt; libvirt 库用 C （支持 C++）实现，且包含对 Python 的直接支持。不过它还支持大量语言绑定。目前已经对 Ruby、Java? 语言，Perl 和 OCaml 实施了绑定。在从 C# 调用 libvirt 方面我们已做了大量工作。libvirt 支持最流行的系统编程语言（C 和 C++）、多种脚本语言、甚至一种统一的函数型语言（Objective caml）。因此，不管您侧重何种语言，libvirt 都会提供一种路径来帮助您控制域。
+ 而且，提供不同语言的绑定，目前支持：c++, python, c#, php等。使用起来都非常方便。&lt;/p&gt;
+
+&lt;h4&gt;4. 相关工具&lt;/h4&gt;
+
+&lt;p&gt; 另外，它还提供一些基本的基于命令行的管理工具，进行简单的资源管理。&lt;/p&gt;
+
+&lt;h4&gt;5. 架构&lt;/h4&gt;
+
+&lt;p&gt;下面两张图是libvirt的运行的两种模式：它分别支持本地管理和远程管理两种方式。针对不同的虚拟机设计一个驱动。便于用户管理。使用远程管理是，需要跟远程主机上的libvirtd通信。&lt;/p&gt;
+
+&lt;h4&gt;6. API接口&lt;/h4&gt;
+
+&lt;p&gt;libvirt提供了各种API的接口。大致可以分为五部分：
+虚拟机监控程序
+连接 API: virConnectPtr 为给定虚拟机监控程序创建连接后会产生所有 libvirt 通信（例如，清单 6 中所示的 open 调用）。该连接为所有其他要使用的 API 提供路径。在 C API 中，该行为通过 virConnectOpen 调用（以及其他进行认证的调用）提供。这些函数的返回值是一个 virConnectPtr 对象，它代表到虚拟机监控程序的一个连接。该对象作为所有其他管理功能的基础，是对给定虚拟机监控程序进行并发 API 调用所必需的语句。
+域 API: virDomainPtr。 用于虚拟机管理。包括创建，启动，停用，迁移，动态修改配置等。    &lt;br/&gt;
+网络 API: 监控虚拟网络&lt;br/&gt;
+存储卷 API: 管理存储设备&lt;br/&gt;
+存储池 API: 管理存储文件系统&lt;br/&gt;
+它们间的对应关系&lt;/p&gt;
+
+&lt;p&gt; 具体的文档说明可以见：&lt;a href=&quot;http://libvirt.org/guide/pdf/Application_Development_Guide.pdf&quot;&gt;http://libvirt.org/guide/pdf/Application_Development_Guide.pdf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; 由于各种虚拟机实现的差异,虚拟机对对不同的API支持是有差异的，具体可以见：
+&lt;a href=&quot;http://libvirt.org/hvsupport.html&quot;&gt;http://libvirt.org/hvsupport.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.ibm.com/developerworks/cn/linux/l-libvirt/&quot;&gt;www.ibm.com/developerworks/cn/linux/l-libvirt/&lt;/a&gt;&lt;br/&gt;
+&lt;a href=&quot;http://libvirt.org/index.html&quot;&gt;http://libvirt.org/index.html&lt;/a&gt;&lt;/p&gt;
+</content>
+</entry>
+
+
+<entry>
+    <title>(已删除)</title>
+    <updated>2011-08-27T00:00:00+08:00</updated>
+    <id>http://xiaohong.me/blog/2011/08/27/make-github-as-blog-engine-supplement</id>
+    <content type="html"></content>
+</entry>
+
+</feed>

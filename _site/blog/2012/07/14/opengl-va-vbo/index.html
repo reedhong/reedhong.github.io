@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>OpenGL中的VA和VBO - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">OpenGL中的VA和VBO</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>二者算是OpenGL学习初期稍微复杂一点的概念。如果对顶点有正确的认识，掌握起来就容易多了。对于OpenGL不少高级技术，我们不仅仅需要知其然，更加需要知其所以然。这样更好地应用于实践之中。我们首先谈VA(Vertex Array, 顶点数组)。</p>
+
+<p>在没有VA之前，比如我们需要绘制20条直线。</p>
+
+<pre class="prettyprint lang-c">
+glBegin(GL_LINES);
+  glVertex2iv(p0);
+  ......
+  glVertex2iv(p20)
+glEnd();
+</pre>
+
+
+<p>一共21次顶点提交。看着是不是有些浪费。还有如果绘制一个立方体，我们做裸奔的方式是啥呢？假设立方体的顶点为p1,...p8.我们可以有下面的绘制代码：</p>
+
+<pre class="prettyprint lang-c">
+glBegin(GL_QUADS); // font
+  glVertex2iv(p0);
+  glVertex2iv(p1);
+  glVertex2iv(p2);
+  glVertex2iv(p3);
+glEnd();
+</pre>
+
+
+<p>// 左侧，右侧，底，顶，背<br/>
+按照绘制前的方式依次绘制其他几个面，可以看出一共需要24此顶点提交，每个顶点被提交3次，看着也挺坑爹的。OpenGL图形绘制在设计时是非常讲究效率的。这个地方就需要去优化它，思路也很简单：减少调用，减少数据的提交。</p>
+
+<p>这种优化的技术就是VA(Vertex Array)。程序预先把顶点相关的属性(可不只是坐标，具体见OpenGL中的顶点)放在一块数组里面，指定相关属性的指针，在渲染的时候，通过索引值，或者偏移进行一次性提交。具体使用过程包括：</p>
+
+<p>(1) 激活相应属性的数组<br/>
+  glEnableClientState(GL_VERTEX_ARRAY);   // 坐标<br/>
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);  // 材质坐标<br/>
+ 注：从这个地方的接口名字也可以看出，OpenGL是在设置Client的状态， glEnable/glDisable是在设置Server的状态。类似于对应的接口在OpenGL中还不少。所以，OpenGL的CS架构要深刻理解。</p>
+
+<p>(2) 指定数组的指针<br/>
+ glVertexPointer( 3, GL_FLOAT, sizeof( gl_vertecex[0] ), gl_vertecex );    glTexCoordPointer( 2, GL_FLOAT, sizeof( gl_texcoords[0] ), gl_texcoords );</p>
+
+<p>(3) 引用和渲染<br/>
+glDrawElement(ith);  // 引用一个顶点
+glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indexArrays );  //  引用索引数组中的顶点
+glDrawArrays(GL_TRIANGLES, 0, 6); // 引用数组前6个顶点</p>
+
+<p>具体的接口的参数说明，大家可以参考OpenGL红宝书。</p>
+
+<p>弄清VA的技术背景是不是也挺容易理解的。但优化是无止境的，我们是否可以往前走得更远呢？OpenGL的CS架构让我们每次都需要从Client提交数据到Server，引入VA之后，只是改进了其提交的效率，提交的现状并没有改变，数据还是老老实实一直放在Client在。Server端每次被动地接受这些数据，数据其实一直没有变而已。</p>
+
+<p>分析到这里，如果做过服务器开发或者web开发的同学就有会想到一个词：cache。数据都是一份，干嘛要每次提交，直接cache到服务端不就可以了。这种简单有效的优化思路就是我们的VBO(Vextex Buffer Object)技术。这样来看OpenGL中的一些技术名词就不在感到困惑，都有其存在的必然性。其使用过程可以简单描述如下：</p>
+
+<p>初始化阶段：<br/>
+1. glGenBuffersARB(1, &amp;nVBOVertices); //生成一个句柄<br/>
+2. glBindBufferARB(GL_ARRAY_BUFFER_ARB, nVBOVertices); //声明该句柄为一个vbo句柄，并选择之<br/>
+3. glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(vertices), vertices,GL_STATIC_DRAW); //将顶点集上传至server端</p>
+
+<p>使用阶段：<br/>
+1. glEnableClientState(GL_VERTEX_ARRAY); //开始使用vbo
+2. glBindBufferARB(GL_ARRAY_BUFFER_ARB, nVBOVertices);  //选择当前使用的vbo<br/>
+3. glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));  //指定vbo顶点格式<br/>
+4. glDrawArrays( GL_TRIANGLES, 0, g_pMesh->m_nVertexCount ); //画吧<br/>
+5. glDisableClientState(GL_VERTEX_ARRAY);<br/>
+6. glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);<br/>
+收尾阶段：<br/>
+1. glDeleteBuffersARB(1,&amp;nVBOVertices); //删除句柄，同时删除server端顶点缓冲</p>
+
+<p>这样一个标准的创建，使用，释放，而且使用整数做句柄的过程其实也挺熟悉的。比如我们在Linux中创建一个文件，进程，socket等。这个过程也是OpenGL其他相关技术的标准过程。比如FBO，纹理映射。</p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/" >http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/</a>
+	</div>
+
+	
+		<div class="links">
+		Jul 14, 2012 |
+		Category: <a href="/blog/categories/opengl/">OpenGL</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/" st_title="OpenGL中的VA和VBO"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/" st_title="OpenGL中的VA和VBO" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/" st_title="OpenGL中的VA和VBO" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/" st_title="OpenGL中的VA和VBO" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2012/07/14/opengl-va-vbo/" st_title="OpenGL中的VA和VBO"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/va/">va</a>,
+			
+			<a href="/blog/tags/vbo/">vbo</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+		<li><a href="/blog/2012/03/24/lua-wuxia/">Lua在武侠世界中的应用</a></li>
+		
+		<li><a href="/blog/2012/07/18/ogre-plugin/">Ogre分析之插件机制</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2012/07/14/opengl-va-vbo';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

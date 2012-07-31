@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>测试虚拟机CPU资源分配 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">测试虚拟机CPU资源分配</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>测试虚拟机CPU资源分配</p>
+
+<h2>说明：</h2>
+
+<p>本测试主要想验证cgroup技术对于cpu资源的分配和占用的情况，验证一些理论上的想法。</p>
+
+<h2>测试环境：</h2>
+
+<p>物理机：
+CPU 8核 Intel(R) Xeon(R) CPU X3440  @ 2.53GHz<br/>
+内存 8G
+虚拟机：domain1, domain2. 二者的cpu资源通过管理平台动态调整</p>
+
+<p>测试方法：
+我们在domain1上跑apache webserver，在另外一台物理主机上通过ab，测试apache的性能参数，通过这个观测虚拟机的性能。或者跑死循环，对比cpu的情况</p>
+
+<h2>测试场景：</h2>
+
+<ol>
+<li><p>domain1独占1个cpu
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu
+2) 平均请求数：9100 req/s</p></li>
+<li><p>domain1独占2个cpu
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu。而且是平均分配到指定的CPU上
+2) 平均请求数：10500 req/s
+注：这里请求数并没有出现随着cpu个数而线性增长的情况，主要受限于我们在单点做压力测试，每个CPU的消耗还只有一半而已。</p></li>
+<li><p>domain1独占3个cpu
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu。cpu占用有两个差不多，另外一个明显要少。不够均衡
+2) 平均请求数：11000 req/s</p></li>
+<li><p>domain1，domain2共同占用1个cpu，各占用50%, domain2闲置
+压力测试：./ab  -c 100 -n 50000 -t 10000 http://10.1.152.69/
+测试结果：
+1) 只占用cgroup中对应cpu.cpuset指定的cpu。
+2) 平均请求数：92000 req/s。
+这个说明domain2的cpu分配了不用的话，domain1毫不客气地拿过来用。</p></li>
+<li><p>domain1，domain2共同占用1个cpu，各占用50%, 二者均跑死循环
+我们直接才python终端运行死循环程序。可以看到如下cpu占用情况 二者均占用50%的cpu。表现完美！</p></li>
+<li><p>domain1，domain2共同占用1个cpu，分别占用80%, 20%, 二者均跑死循环
+我们在5的基础上修改二者cpu的占用情况，发现占用变成下面的情况：79%, 20%表现也几近完美！</p></li>
+<li><p>domain1，domain2共同占用0.5个cpu，分别占用30%, 20%, 二者均跑死循环
+表现情况为60%, 40%.可以看到，在另外0.5的cpu闲置的情况下，domain1和domain2其实是按照占用比例把单个cpu完全瓜分。</p></li>
+</ol>
+
+
+<h2>总结：</h2>
+
+<p>从上面的各种测试场景我们很欣喜地看到，cgroup在cpu资源的分配上非常灵活和高效，完全符合我们的预期。总结一下包括下面一些功能<br/>
+1. 支持动态修改。在修改cpu.shares后，可以看到资源的占用立刻发生变化。<br/>
+2. 良好的细粒度支持。设置好cpu.shares我们可以让一个cpu被任意个虚拟机占用<br/>
+3. 支持overbook。虽然只分配一部分cpu。但如果别人不用，我就抢过来用，闲着也是闲着。很好的特性。</p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/" >http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/</a>
+	</div>
+
+	
+		<div class="links">
+		Jul 13, 2011 |
+		Category: <a href="/blog/categories/virtualmachine/">VirtualMachine</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/" st_title="测试虚拟机CPU资源分配"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/" st_title="测试虚拟机CPU资源分配" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/" st_title="测试虚拟机CPU资源分配" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/" st_title="测试虚拟机CPU资源分配" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2011/07/13/vm-cpu-allocate/" st_title="测试虚拟机CPU资源分配"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/lxc/">lxc</a>,
+			
+			<a href="/blog/tags/vm/">vm</a>,
+			
+			<a href="/blog/tags/performance/">performance</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2011/03/17/vm-test-framework/">虚拟机测试框架</a></li>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+		<li><a href="/blog/2012/07/06/opengl-windows/">在Windows下开发OpenGL程序</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2011/07/13/vm-cpu-allocate';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

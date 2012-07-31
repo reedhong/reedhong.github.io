@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>Lua学习小记 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">Lua学习小记</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>作为一名游戏开发人员，都不能免俗地想打造一个自己的游戏引擎。现如今，游戏引擎不支持脚本引擎好像都说不过去。虽然Python也可作为游戏脚本，但对于手机游戏开发，嵌入这么个脚本引擎未免显得太重了写。所以，也开始折腾了起Lua的东西。</p>
+
+<p>这里有有些参考资料，总结得不错，供大家参考。</p>
+
+<p>作为游戏中的脚本引擎，其实关键是要弄明白c/c++和Lua之间如何互相调用(即弄清楚Lua C API)。大致弄清楚下面几个问题，就好说了。</p>
+
+<p>c-->lua
+1. c执行lua脚本  <br/>
+2. c访问lua中的变量<br/>
+3. c调用lua中的函数</p>
+
+<p>lua-->c
+1. 把c中的函数注册到lua中去<br/>
+2. 把c中的变量扔到lua中去。</p>
+
+<p>网上有不少的相关代码，可以去查看。比如<a href="http://www.cppblog.com/flyindark/archive/2011/07/01/149937.html">这里</a>，还有<a href="http://www.cppblog.com/makiv/archive/2008/01/11/40980.html">这里</a>。</p>
+
+<p>这些代码初次读起来非常痛苦。重点理解下面几个概念：<br/>
+1.在Lua中，基本数据：nil, boolean, number, string, userdata, function, thread, and table。都是有一个结构来表示。函数也是一种数据，可以被复制和传递等。<br/>
+2.运行时一般有一个lua_state,作为一个运行状态，存储了当前的所有的全局变量(不仅仅是数据，函数也有)和栈。<br/>
+3.Lua和c之间的交互是通过对栈进行操作来实现的 lua的栈类似于以下的定义, 它是在创建lua_State的时候创建的:</p>
+
+<pre><code>    TValue stack[max_stack_len]  // 欲知内情可以查 lstate.c 的stack_init函数
+存入栈的数据类型包括数值, 字符串, 指针, talbe, 闭包等。  
+</code></pre>
+
+<p>大量的API操作都是在对栈进行读取或者设置数据，隐含有栈顶的变化，这点一定要把握住，不然代码看着就晕眩的。关于Lua API的东西，这篇文档总结的不错。</p>
+
+<p>大致这么多，后面会讨论关于如何用luaplus在c++中嵌入lua。</p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2012/02/29/lua-study/" >http://xiaohong.me/blog/2012/02/29/lua-study/</a>
+	</div>
+
+	
+		<div class="links">
+		Feb 29, 2012 |
+		Category: <a href="/blog/categories/language/">Language</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2012/02/29/lua-study/" st_title="Lua学习小记"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2012/02/29/lua-study/" st_title="Lua学习小记" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2012/02/29/lua-study/" st_title="Lua学习小记" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2012/02/29/lua-study/" st_title="Lua学习小记" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2012/02/29/lua-study/" st_title="Lua学习小记"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/lua/">lua</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2011/03/14/lxc-introduction/">Libvirt介绍</a></li>
+		
+		<li><a href="/blog/2011/07/29/libvirt-python-api-exten/">libvirt中API的扩展</a></li>
+		
+		<li><a href="/blog/2012/03/24/lua-wuxia/">Lua在武侠世界中的应用</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2012/02/29/lua-study';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+
