@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>Ogre分析之插件机制 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">Ogre分析之插件机制</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>Ogre有良好的插件系统，能够方便地系统更换或添加一些功能组件。通过配置文件去驱动插件的加载，非常灵活。这种设计非常值得我们学习。为此深入地考察了一番Ogre插件系统的设计。</p>
+
+<h4>1. 先看Plugin继承体系：</h4>
+
+<p><img src="/images/blog/ogre-plugin.jpg" alt="ogre plugin" /><br/>
+Plugin本身为一抽象类，定义了作为一个Plugin应该具备的一些基本接口</p>
+
+<pre class="prettyprint lang-cpp">  
+class Plugin
+{  
+public:  
+    Plugin(){}  
+    ~Plugin(){}  
+    virtual const String& getName() const = 0;   
+    virtual void install() = 0;  
+    virtual void initialise() = 0;  
+    virtual void shutdown() = 0;  
+    virtual void uninstall() = 0;  `  
+};  
+</pre>
+
+
+<p>所有继承Plugin的类实现这些接口。我们来看GLPlugin一些接口的实现</p>
+
+<pre class="prettyprint lang-cpp">  
+void GLPlugin::install()  
+{
+    mRenderSystem = new GLRenderSystem();   
+    // 加到Root的renders中  
+    Root::getSingleton().addRenderSystem(mRenderSystem);  
+}
+
+void GLPlugin::uninstall()
+{
+    delete mRenderSystem;
+    mRenderSystem = 0;
+}
+</pre>
+
+
+<h4>2. 再看动态库的管理，重点看类:DynLib和DynLibManager</h4>
+
+<p>DynLib封装了不同平台上动态库的操作，提供一致性的接口。可以理解为一种Adapter的设计模式。重点可以看其load和unload接口的实现，这里就不错具体的分析。<br/>
+DynLibManager把系统涉及到的所有DnyLib，通过一个Map管理起来。</p>
+
+<h4>3. Root涉及插件加载的接口**</h4>
+
+<blockquote><p>// 通过dll，加载插件，此处其实是加载动态库，这个地方的命名有些问题。</p></blockquote>
+
+<pre class="prettyprint lang-cpp">  
+void loadPlugin(const String& pluginName)  
+{
+  DynLib* lib = DynLibManager::getSingleton().load( pluginName );  
+  DLL_START_PLUGIN pFunc = (DLL_START_PLUGIN)lib->getSymbol("dllStartPlugin");  
+  pFunc();  // 调用dll中的dllStartPlugin接口实现插件的安装  
+}
+
+// 通过dll，卸载插件  
+void unloadPlugin(const String& pluginName);  
+{  
+  // Call plugin shutdown    
+  DLL_STOP_PLUGIN pFunc = (DLL_STOP_PLUGIN)(*i)->getSymbol("dllStopPlugin");  
+  // this must call uninstallPlugin  
+  pFunc();  
+  // Unload library (destroyed by DynLibManager)  
+  DynLibManager::getSingleton().unload(*i);  
+  mPluginLibs.erase(i);   
+}  
+
+// 安装和卸载插件  
+void installPlugin(Plugin* plugin)  
+{
+  // 加入到插件列表  
+  mPlugins.push_back(plugin);  
+  // 安装  
+  plugin->install();  
+
+  // if rendersystem is already initialised, call rendersystem init too  
+  // 初始化  
+  if (mIsInitialised)
+  {    
+     plugin->initialise();  
+  }
+ 
+}
+
+void uninstallPlugin(Plugin* plugin);  
+{  
+  if (mIsInitialised)  
+    plugin->shutdown();  
+  plugin->uninstall();  
+  mPlugins.erase(i);  
+}  
+</pre>
+
+
+<h4>4. 然后看动态库的定义文件</h4>
+
+<p>挑选RenderSystems/GL/src/OgreGLEngineDll.cpp文件分析：</p>
+
+<pre class="prettyprint lang-cpp"> 
+extern "C" void _OgreGLExport dllStartPlugin(void) throw()  
+{  
+  plugin = new GLPlugin();  
+  Root::getSingleton().installPlugin(plugin);
+
+}
+
+extern "C" void _OgreGLExport dllStopPlugin(void)
+{
+  Root::getSingleton().uninstallPlugin(plugin);
+  delete plugin;
+}
+
+</pre>
+
+
+<p>可以看出，也就是动态创建插件，然后调用Root的接口安装和卸载相应的接口
+根据上面的分析，我们在看动态库加载和静态库加载的全过程：</p>
+
+<h4>1. 动态库加载</h4>
+
+<p>主要是通过读入plugins.cfg的配置文件，依次加载进来</p>
+
+<pre class="prettyprint lang-cpp"> 
+Root::Root()
+{
+ ...
+ // Load plugins
+if (!pluginFileName.empty())  
+  loadPlugins(pluginFileName);{  
+    // 1. 解析plugin配置文件(plugin.cfg)  
+    // 2. 依次加载插件  
+   for( StringVector::iterator it = pluginList.begin(); it != pluginList.end(); ++it )  
+   {  
+     loadPlugin(pluginDir + (*it));{  
+       
+     }  
+   }  
+  }  
+ ...
+}
+</pre>
+
+
+<h4>2.静态库的加载</h4>
+
+<p>在编译前需要修改编译参数，编译参数的修改在Ogre\include\OgreBuildSettings.h中，将#define OGRE_STATIC_LIB 打开。然后手动通过Root的installPlugin接口加载。我们可以看源码Samples\Browser\Android\project\jni\ogrewrapper.cpp中的代码</p>
+
+<pre class="prettyprint lang-cpp">     
+ // Create a root object
+    g_root = OGRE_NEW Ogre::Root("", "", "");
+
+    // Register the ES2 plugin
+    g_gles2Plugin = OGRE_NEW Ogre::GLES2Plugin();
+    Ogre::Root::getSingleton().installPlugin(g_gles2Plugin);
+
+    // Register particle plugin
+    g_pfxPlugin = OGRE_NEW Ogre::ParticleFXPlugin();
+    Ogre::Root::getSingleton().installPlugin(g_pfxPlugin);
+</pre>
+
+
+<p>通过上述方法即可。</p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2012/07/18/ogre-plugin/" >http://xiaohong.me/blog/2012/07/18/ogre-plugin/</a>
+	</div>
+
+	
+		<div class="links">
+		Jul 18, 2012 |
+		Category: <a href="/blog/categories/ogre/">Ogre</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2012/07/18/ogre-plugin/" st_title="Ogre分析之插件机制"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2012/07/18/ogre-plugin/" st_title="Ogre分析之插件机制" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2012/07/18/ogre-plugin/" st_title="Ogre分析之插件机制" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2012/07/18/ogre-plugin/" st_title="Ogre分析之插件机制" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2012/07/18/ogre-plugin/" st_title="Ogre分析之插件机制"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/ogre/">ogre</a>,
+			
+			<a href="/blog/tags/plugin/">plugin</a>,
+			
+			<a href="/blog/tags/source/">source</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2012/03/24/lua-wuxia/">Lua在武侠世界中的应用</a></li>
+		
+		<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/">Ogre编码规范</a></li>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2012/07/18/ogre-plugin';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

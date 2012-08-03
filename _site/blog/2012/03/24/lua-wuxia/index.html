@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>Lua在武侠世界中的应用 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">Lua在武侠世界中的应用</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>Lua应用于游戏之中早不是新鲜事情，但对于游戏新人的我，却充满好奇。正好武侠世界嵌入Lua，重点阅读了相关部分。</p>
+
+<p>在阅读之前主要对下面个问题比较好奇：
+1. Lua跟C++如何混合编程？<br/>
+2. Lua主要用来做些什么事情？</p>
+
+<p>云风在《C/C++ 与 Lua 的混合编程》中提到：嵌入还是扩展，这是一个问题。<br/>
+在武侠中，是采取嵌入的方式。通过LuaPlus将Lua嵌入到C++中。在C++中调用封装好的lua c api直接执行对应的Lua脚本。而为了方便Lua中调用C++，C++层做了大量的注册操作。由于所有的注册都是直接注入到Lua的global中，所以，我们只需要启动武侠客户端，在LuaObject LuaState::GetGlobals()实现处下一断点就可以观察所有的注册操作。按照代码运行顺序，为一下几个步骤：</p>
+
+<h2>1.LuaPlus初始化虚拟机时注册的一些东西</h2>
+
+<pre class="prettyprint lang-cpp">
+  ScriptFunctionsRegister( this );
+
+  GetGlobals().Register("LuaDumpGlobals", LS_LuaDumpGlobals);
+  GetGlobals().Register("LuaDumpObject", LS_LuaDumpObject);
+  GetGlobals().Register("LuaDumpFile", LS_LuaDumpFile);
+ }
+
+ GetGlobals().Register("LOG", LS_LOG);
+ GetGlobals().Register("_ALERT", LS_LOG);
+</pre>
+
+
+<h2>2.注册Helper</h2>
+
+<pre class="prettyprint lang-cpp">
+CHelperSystem::CHelperSystem() :
+ LuaExport< >("Helper") LuaExport(const char* pszName, LuaPlus::LuaState* pState = 0)
+{                        
+s_pMetaTable = new LuaPlus::LuaObject;
+s_pMetaTable = theState->GetGlobals().CreateTable(pszName); // Helper                        
+s_pMetaTable->SetObject("__index", *s_pMetaTable);                        
+LuaObject obj = theState->BoxPointer(s_pMe);                        
+obj.SetMetaTable(*s_pMetaTable);                        
+theState->GetGlobals().SetObject(pszName, obj);
+}                         
+</pre>
+
+
+<h2>3. 注册Variable,用于访问系统的配置信息</h2>
+
+<pre class="prettyprint lang-cpp">
+VOID CScriptSystem::Initial(VOID*)
+｛
+    // 注册大量跟游戏逻辑相关的函数和对象,均定义在SCRIPT_SANDBOX(沙箱)命名空间下面
+｝
+VOID CVariableSystem::LoadVariable(LPCTSTR szFileName, VARIABLE_MAP& mapBuf)
+｛
+    m_pMetaTable = new LuaPlus::LuaObject;
+    *m_pMetaTable = CScriptSystem::GetMe()->GetLuaState()->GetGlobals().CreateTable("Variable");
+    m_pMetaTable->SetObject("__index", *m_pMetaTable);
+    ....
+    obj_Variable.SetMetaTable(*m_pMetaTable);
+  
+    CScriptSystem::GetMe()->GetLuaState()->GetGlobals().SetObject("Variable", obj_Variable);
+｝
+</pre>
+
+
+<h2>4. 注册大量跟游戏逻辑相关的函数和对象</h2>
+
+<p>比如：游戏中玩家的信息</p>
+
+<pre class="prettyprint lang-cpp">
+VOID CScriptSystem::Initial(VOID*)
+{
+    // 注册大量跟游戏逻辑相关的函数和对象,均定义在SCRIPT_SANDBOX(沙箱)命名空间下面
+｝
+</pre>
+
+
+<h2>5. UI控件相关</h2>
+
+<pre class="prettyprint lang-cpp">
+void CGameUIScript::createBindings(void)
+｛
+    pLuaState->GetGlobals().Register("GetIconFullName", CUIIconsManager::LUA_GetIconFullName);
+    // Event参数
+    {
+        g_theUIEventArg.m_pMetaTable = new LuaPlus::LuaObject;
+        *(g_theUIEventArg.m_pMetaTable) = pLuaState->GetGlobals().CreateTable("CEGUIEventMetaTable");
+        g_theUIEventArg.m_pMetaTable->SetObject("__index", *(g_theUIEventArg.m_pMetaTable));
+
+        g_theUIEventArg.m_pMetaTable->RegisterObjectFunctor("GetValue", &CEventArg::LUA_GetValue);
+
+        LuaObject obj_UIEvent = pLuaState->BoxPointer(&(g_theUIEventArg));
+        obj_UIEvent.SetMetaTable(*(g_theUIEventArg.m_pMetaTable));
+        pLuaState->GetGlobals().SetObject("CEArg", obj_UIEvent);
+    }
+
+    //CUIWindowItem(this)
+
+    {
+        LuaObject metaUIWindowItem = pLuaState->GetGlobals().CreateTable("MetaTable_UIWindowItem");
+        metaUIWindowItem.SetObject("__index", metaUIWindowItem);
+    }
+
+    //控件, 只是注册控件的MetaTable: 有点像注册了一个类
+    {
+        LUA_CONTROL::Window::RegisterMetaTable();
+    }
+｝
+</pre>
+
+
+<h2></h2>
+
+<ol>
+<li>this指针：  ##</li>
+</ol>
+
+
+<pre class="prettyprint lang-cpp">
+    CUIWindowItem
+       //创建脚本运行环境
+            m_pScriptEnv = g_pScriptSys->NewEnvironment(m_strWindowName.c_str(), m_strScriptFileName.c_str());{
+          // 创建一个对应环境的table
+          }
+
+            //---------------------------------------
+            //注册引用函数
+
+            //注册"this"对象
+            LuaObject metaUIWindowItem = g_pScriptSys->GetLuaState()->GetGlobals().GetByName("MetaTable_UIWindowItem");
+
+            LuaObject objThis = g_pScriptSys->GetLuaState()->BoxPointer(this);
+            objThis.SetMetaTable(metaUIWindowItem);
+            m_pScriptEnv->GetLuaObject()->SetObject("this", objThis);
+
+</pr>
+
+
+
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2012/03/24/lua-wuxia/" >http://xiaohong.me/blog/2012/03/24/lua-wuxia/</a>
+	</div>
+
+	
+		<div class="links">
+		Mar 24, 2012 |
+		Category: <a href="/blog/categories/source/">Source</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2012/03/24/lua-wuxia/" st_title="Lua在武侠世界中的应用"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2012/03/24/lua-wuxia/" st_title="Lua在武侠世界中的应用" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2012/03/24/lua-wuxia/" st_title="Lua在武侠世界中的应用" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2012/03/24/lua-wuxia/" st_title="Lua在武侠世界中的应用" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2012/03/24/lua-wuxia/" st_title="Lua在武侠世界中的应用"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/lua/">lua</a>,
+			
+			<a href="/blog/tags/武侠世界/">武侠世界</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2012/07/18/ogre-plugin/">Ogre分析之插件机制</a></li>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+		<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/">Ogre编码规范</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2012/03/24/lua-wuxia';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

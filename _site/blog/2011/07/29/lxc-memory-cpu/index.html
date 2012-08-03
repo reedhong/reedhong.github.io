@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>libvirt中CPU和内存的细粒度管理机制 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">libvirt中CPU和内存的细粒度管理机制</h2></div>
+
+<div class="node">
+	<div class="content">
+		<h1>内存</h1>
+
+<pre class="prettyprint lang-c">
+struct _virDomainDef {
+     ...
+    struct {
+        unsigned long max_balloon;  
+        unsigned long cur_balloon;  
+        unsigned long hugepage_backed;
+        unsigned long hard_limit;
+        unsigned long soft_limit;
+        unsigned long min_guarantee;
+        unsigned long swap_hard_limit;
+    } mem;
+    ...
+}
+</pre>
+
+
+<h2>选项：</h2>
+
+<ol>
+<li><p>hard_limit：  ---> memory.limit_in_bytes
+it represents the maximum memory the guest can use.
+guest能使用的最大内存</p></li>
+<li><p>soft_limit  ---> memory.soft_limit_in_bytes
+it represents the memory upper limit enforced during memory contention.
+内存紧张时的保证。
+比如：1G内存的物理主机，我们分配两个虚拟机器，设置hard_limit均为600M。但这样如果在资源紧张时就傻逼了。
+需要设置soft_limit=500M，保证最多只有这么多内存可被用。</p></li>
+<li><p>min_guarantee --->
+it represents the minimum  memory guaranteed to be reserved for the guest
+注：lxc未设置这个</p></li>
+<li><p>swap_hard_limit  ---> memory.memsw.limit_in_bytes
+it represents the maximum swap plus memory the guest can use. This limit has to be more than</p></li>
+</ol>
+
+
+<h2>接口：</h2>
+
+<p>virDomainSetMemoryParameters： <br/>
+virDomainGetMemoryParameters<br/>
+lxc实现： lxcDomainSetMemoryParameters lxcDomainGetMemoryParameters{</p>
+
+<pre><code> 根本不同的参数，设置或者获取hard_limit, soft_limit, swap_hard_limit  的值  
+</code></pre>
+
+<p>}</p>
+
+<p>virDomainSetMemory:(不停用虚拟机的情况下动态增加内存的使用值)<br/>
+Dynamically change the target amount of physical memory allocated to a domain.<br/>
+在lxc的实现中，就是设置：memory.limit_in_bytes的值，跟hard_limit一致</p>
+
+<p>virDomainSetMaxMemory:<br/>
+Dynamically change the maximum amount of physical memory allocated to a domain<br/>
+在lxc的实现中</p>
+
+<pre class="prettyprint lang-c">
+lxcDomainSetMaxMemory{ // 这个地方跟接口语义不太符合
+    if (newmax < vm->def->mem.cur_balloon) {
+        lxcError(VIR_ERR_INVALID_ARG,
+                         "%s", _("Cannot set max memory lower than current memory"));
+        goto cleanup;
+    }
+
+    vm->def->mem.max_balloon = newmax; // 这个值没有回写到cgroup中，而是用来在lxcDomainSetMemory中作做判断用
+}
+</pre>
+
+
+<p>xml中的配置选项：</p>
+
+<p>`  <memory>286954</memory> 这个参数必须有，不然启动不成功    <br/>
+  <memtune></p>
+
+<pre><code>&lt;hard_limit&gt;1048576&lt;/hard_limit&gt;  
+&lt;soft_limit&gt;131072&lt;/soft_limit&gt;  
+&lt;swap_hard_limit&gt;2097152&lt;/swap_hard_limit&gt;  
+&lt;min_guarantee&gt;65536&lt;/min_guarantee&gt; #对lx无效  
+</code></pre>
+
+<p>  </memtune>`</p>
+
+<p>lxc相关：<br/>
+我们直接用virDomainSetMemoryParameters来控制参数， virDomainSetMemory之类不好用。</p>
+
+<p>总结：lxc中需要配置的参数：<br/>
+hard_limit，soft_limit，swap_hard_limit   <br/>
+可以通过virDomainSetMemory动态增加内存，但增加不能超过max_balloon的值，所以，当增加的内存指超过max_balloon的时候，需要先调用virDomainSetMaxMemory增加内存，然后再调用virDomainSetMemory</p>
+
+<p>Python接口：</p>
+
+<h1>CPU</h1>
+
+<p>CGROUP主要设置参数
+cpu.shares
+cpuset.cpus</p>
+
+<p>选项：</p>
+
+<pre class="prettyprint lang-c">
+struct _virDomainDef {
+    unsigned short vcpus;
+    unsigned short maxvcpus;
+    int cpumasklen;
+    char *cpumask;
+
+    struct {
+        unsigned long shares;
+        int nvcpupin;
+        virDomainVcpupinDefPtr *vcpupin;
+    } cputune;
+}
+</pre>
+
+
+<p>相关接口：</p>
+
+<p>_virSchedParameter<br/>
+virDomainGetSchedulerParameters<br/>
+virDomainSetSchedulerParameters</p>
+
+<p>Python接口：</p>
+
+<pre class="prettyprint lang-c">
+virDomainGetMaxVcpus()：
+virDomainSetVcpus()
+virDomainGetVcpusFlags/virDomainSetVcpusFlags()
+virDomainPinVcpu()
+</pre>
+
+
+<p>以上接口lxc均已实现</p>
+
+<p>xml中的配置选项：<br/>
+`  <cputune></p>
+
+<pre><code>&lt;vcpupin vcpu="0" cpuset="1-4,^2"/&gt;  
+&lt;vcpupin vcpu="1" cpuset="0,1"/&gt;  
+&lt;vcpupin vcpu="2" cpuset="2,3"/&gt;  
+&lt;vcpupin vcpu="3" cpuset="0,4"/&gt;  
+&lt;cpushares&gt;2048&lt;/cpushares&gt;   
+ /*应该是shares，而不是cpushares (virXPathULong("string(./cputune/shares[1])", ctxt, 文档中这个地方时有错误的*/
+</code></pre>
+
+<p>  </cputune>`</p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/" >http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/</a>
+	</div>
+
+	
+		<div class="links">
+		Jul 29, 2011 |
+		Category: <a href="/blog/categories/virtualmachine/">VirtualMachine</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/" st_title="libvirt中CPU和内存的细粒度管理机制"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/" st_title="libvirt中CPU和内存的细粒度管理机制" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/" st_title="libvirt中CPU和内存的细粒度管理机制" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/" st_title="libvirt中CPU和内存的细粒度管理机制" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2011/07/29/lxc-memory-cpu/" st_title="libvirt中CPU和内存的细粒度管理机制"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/libvirt/">libvirt</a>,
+			
+			<a href="/blog/tags/manage/">manage</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/">Ogre编码规范</a></li>
+		
+		<li><a href="/blog/2012/03/24/lua-wuxia/">Lua在武侠世界中的应用</a></li>
+		
+		<li><a href="/blog/2012/07/18/ogre-plugin/">Ogre分析之插件机制</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2011/07/29/lxc-memory-cpu';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

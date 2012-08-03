@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>一些3D模型格式介绍 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">一些3D模型格式介绍</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>常用3D模型的相关资源整理。</p>
+
+<h2>MS3D</h2>
+
+<ul>
+<li>wiki <br/>
+<a href="http://zh.wikipedia.org/wiki/MilkShape_3D">http://zh.wikipedia.org/wiki/MilkShape_3D</a></li>
+<li>说明 <br/>
+它主要用于低多边形游戏角色的建模和动作编辑。支持多种游戏中的模型文件，可以打开例如《半条命》、《Quake》、《反恐精英》等。比较简单和常用。</li>
+<li>解析<br/>
+<a href="http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=31">http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=31</a></li>
+</ul>
+
+
+<h2>OBJ</h2>
+
+<ul>
+<li><p>wiki<br/>
+<a href="http://en.wikipedia.org/wiki/Wavefront_.obj_file">http://en.wikipedia.org/wiki/Wavefront_.obj_file</a></p></li>
+<li><p>说明<br/>
+由Wavefront公司在其Advanced Visualizer动画包中定义的。是一个开放的格式，被很多3D软件所支持。它只是定义了一个无题的3D几何模型而已，包括：顶点位置，材质坐标，法线。不涉及骨骼动画的东西。</p></li>
+<li>格式<br/>
+<a href="http://www.martinreddy.net/gfx/3d/OBJ.spec">http://www.martinreddy.net/gfx/3d/OBJ.spec</a></li>
+<li>资源：
+http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html</li>
+</ul>
+
+
+<h2>3DS</h2>
+
+<ul>
+<li>wik<br/>
+<a href="http://en.wikipedia.org/wiki/.3ds">http://en.wikipedia.org/wiki/.3ds</a></li>
+<li>时间<br/>
+1990年。</li>
+<li><p>说明<br/>
+3dsmax的前身3dsutido的格式。当时业界的通用标准格式之一。能够稳定地保存模型mesh信息和uv信息，也兼容基础骨骼和基本动画。现在主要用来存储mesh模型。所有3D软件通用。
+一种二进制存储格式。基于chunk</p></li>
+<li><p>格式<br/>
+<a href="http://www.martinreddy.net/gfx/3d/3DS.spec">http://www.martinreddy.net/gfx/3d/3DS.spec</a></p></li>
+<li><p>解析<br/>
+<a href="http://anony3721.blog.163.com/blog/static/5119742011525103920153/">http://anony3721.blog.163.com/blog/static/5119742011525103920153/</a><br/>
+<a href="http://www.gamedev.net/topic/313126-3ds-parsing-tutorial/">http://www.gamedev.net/topic/313126-3ds-parsing-tutorial/</a>
+<a href="http://www.spacesimulator.net/wiki/index.php?title=Tutorials:3ds_Loader">http://www.spacesimulator.net/wiki/index.php?title=Tutorials:3ds_Loader</a></p></li>
+</ul>
+
+
+<h2>MD2</h2>
+
+<ul>
+<li>wiki<br/>
+  <a href="http://en.wikipedia.org/wiki/MD2_(file_format">http://en.wikipedia.org/wiki/MD2_(file_format)</a>)</li>
+<li><p>说明<br/>
+QuakeII引擎使用。主要用来支持动画模型，但也可以存储静态模型数据。通过加入关键帧来实现动画，关键帧存储在模型数据中，引擎复杂插值计算。</p></li>
+<li><p>格式
+<a href="http://codeand.me/a/quake-ii_md2_format_chinese/">http://codeand.me/a/quake-ii_md2_format_chinese/</a></p></li>
+<li><p>解析<br/>
+<a href="http://wenku.baidu.com/view/6b42cb2bcfc789eb172dc841.html">http://wenku.baidu.com/view/6b42cb2bcfc789eb172dc841.html</a>
+<a href="http://wenku.baidu.com/view/8a50c58183d049649b665840.html">http://wenku.baidu.com/view/8a50c58183d049649b665840.html</a>  <em>(非常详尽)</em></p></li>
+</ul>
+
+
+<h2>MD3</h2>
+
+<ul>
+<li>wiki<br/>
+<a href="http://en.wikipedia.org/wiki/MD3_(file_format)">http://en.wikipedia.org/wiki/MD3_(file_format)</a></li>
+<li>说明<br/>
+QuakeIII引擎使用。MD2升级版本，不支持骨骼动画。仍然是关键帧动画的模式。在一个MD3模型动画系统中，通常有<em>.md3，</em>.skin，*.cfg以及一些图片格式文件组成，如（animation.cfg、head.md3、head_default.skin、lower.md3、lower_default.skin、upper.md3、upper_default.skin、band.tga、cigar.tga）。MD3文件为二进制格式文件，.skin，.cfg为文本文件。</li>
+<li><p>格式<br/>
+<a href="http://linux.ucla.edu/~phaethon/q3/formats/md3format.html">http://linux.ucla.edu/~phaethon/q3/formats/md3format.html</a></p></li>
+<li><p>解析<br/>
+<a href="http://dev.gameres.com/Program/Visual/3D/MD3Format.htm">http://dev.gameres.com/Program/Visual/3D/MD3Format.htm</a></p></li>
+</ul>
+
+
+<h2>FBX:</h2>
+
+<ul>
+<li>wiki<br/>
+<a href="http://en.wikipedia.org/wiki/FBX">http://en.wikipedia.org/wiki/FBX</a></li>
+<li>时间<br/>
+1996年FilmBox1.5</li>
+<li><p>说明<br/>
+FBX是Autodesk的一个用于跨平台的免费三维数据交换的格式（最早是由Kaydara在FilmBox中开发，但后来被AutoDesk其收购），目前被众多的标准建模软件所支持，在游戏开发领域也常用来作为各种建模工具的标准导出格式。Autodesk提供了基于C++（还有Python）的SDK来实现对FBX格式的各种读写、修改以及转换等操作，之所以如此是因为FBX的格式不是公开的，这也是FBX的诟病之一。与FBX相对的则是格式开源的Collada，它的应用也很广泛</p></li>
+<li><p>格式<br/>
+非开源，无完成格式描述文档。可以用AutoDesk提供的SDK进行读写，也有一些三方的Library支持。</p></li>
+<li><p>解析<br/>
+<a href="http://blog.csdn.net/bugrunner/article/details/7210511">http://blog.csdn.net/bugrunner/article/details/7210511</a>
+<a href="http://openendedgroup.com/field/LoadingFBXFiles">http://openendedgroup.com/field/LoadingFBXFiles</a></p></li>
+</ul>
+
+
+<h2>Collada</h2>
+
+<ul>
+<li>wiki<br/>
+<a href="http://en.wikipedia.org/wiki/COLLADA">http://en.wikipedia.org/wiki/COLLADA</a></li>
+<li>说明</li>
+<li>开放文档标准，基于XML。数字内容的中间交换格式，绝大多数3D软件和很多3D游戏引擎都支持。</li>
+<li>COLLAborative Design Activity 的缩写</li>
+<li>一般的文件后缀: .dae(digital asset exchange)</li>
+<li>最早由Sony创建的，现归Khronos Group(OpenGL之类也是这个组织的)</li>
+<li><p>编程方式类似于COM</p></li>
+<li><p>解析<br/>
+<a href="http://www.cnblogs.com/Jedimaster/archive/2007/12/01/979256.html">http://www.cnblogs.com/Jedimaster/archive/2007/12/01/979256.html</a><br/>
+<a href="http://opencollada.org/">http://opencollada.org/</a></p></li>
+<li><p>资源<br/>
+gamedev上面的讨论collada vs fbx: <a href="http://www.gamedev.net/topic/467753-collada-vs-autodesk-fbx/">http://www.gamedev.net/topic/467753-collada-vs-autodesk-fbx/</a><br/>
+对coolada，fbx的评价：<a href="http://stackoverflow.com/questions/441388/most-common-3d-model-format">http://stackoverflow.com/questions/441388/most-common-3d-model-format</a><br/>
+<em>二者均属于交换性质的格式，为了尽量支持更多的格式，在设计上不可避免地陷入复杂，因而导致效率底下。所以应用程序在实际的时候会转化为自有格式，以提高效率。</em></p></li>
+</ul>
+
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2012/07/31/3d-model/" >http://xiaohong.me/blog/2012/07/31/3d-model/</a>
+	</div>
+
+	
+		<div class="links">
+		Jul 31, 2012 |
+		Category: <a href="/blog/categories/game/">Game</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2012/07/31/3d-model/" st_title="一些3D模型格式介绍"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2012/07/31/3d-model/" st_title="一些3D模型格式介绍" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2012/07/31/3d-model/" st_title="一些3D模型格式介绍" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2012/07/31/3d-model/" st_title="一些3D模型格式介绍" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2012/07/31/3d-model/" st_title="一些3D模型格式介绍"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/model/">model</a>,
+			
+			<a href="/blog/tags/3d/">3D</a>,
+			
+			<a href="/blog/tags/introduction/">introduction</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2012/03/24/lua-wuxia/">Lua在武侠世界中的应用</a></li>
+		
+		<li><a href="/blog/2012/07/06/opengl-windows/">在Windows下开发OpenGL程序</a></li>
+		
+		<li><a href="/blog/2011/05/31/discuz-gbk2utf8/">如何将gbk版本discuz转为化为utf-8版本？</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2012/07/31/3d-model';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>Ogre编码规范 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">Ogre编码规范</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>翻译自: <a href="http://temas.obelisk.net/ogre/CR/docs/howto.html">http://temas.obelisk.net/ogre/CR/docs/howto.html</a></p>
+
+<p>文章的前半段主要说明此文档存在的意义和Code Review的过程，暂不做翻译，直接看编码规范</p>
+
+<h1>风格</h1>
+
+<p>下面的这些规范包含缩进，大括号放置，变量命名等。</p>
+
+<ul>
+<li><p>用4个space做缩进，而不是tab</p></li>
+<li><p>绝大多数的大括号都另起一行，包括：if, else, for, while,类定义，函数定义等<br/>
+<strong><em>示例1：大括号的一般写法</em></strong><pre>
+while(expr)
+{
+  //另起一行
+}
+</pre></p></li>
+<li><p>在文件中定义namespace的时候，大括号无须另起一行<br/>
+<strong><em>示例2：名字域中大括号的写法</em></strong><pre>
+while(expr)
+{
+// 另起一行
+}
+</pre></p></li>
+<li>对于只有一行的代码块，无须大括号，但需要另起一行，加上缩进。但如果其前置代码有大括号(比如：if分支后面的else)，那么就算只有一行代码，也需要加上大括号。  <br/>
+<strong><em>示例3：一行逻辑块</em></strong>  <pre>
+if(expr)
+// 一行代码
+else
+// 也是一行
+</pre>  <br/>
+<strong><em>示例4：相连代码块</em></strong><pre>
+if(expr)
+{
+// 多行代码
+｝
+else
+{
+//只有一行，但也需要加上大括号
+}
+</pre></li>
+<li><p>如果条件和循环语句后面带"("，则需要在"("前输入空格<br/>
+<strong><em>示例5:带空格的圆括号</em></strong><pre>
+if (expr)
+  // if后面有空格
+while (expr)
+  // while后面有空格
+for (expr)
+  // for后面有空格
+</pre></p></li>
+<li><p>如果条件和循环语句后面被括起来的表达式与括号见不能有空格<br/>
+<strong><em>示例6:表达式的空格</em></strong><pre>
+if (expr) // 可行
+if ( expr ) // 不可以
+</pre></p></li>
+<li><p>else if 代码块必须放在一行<br/>
+<strong><em>示例7: else if 代码块</em></strong><pre>
+else if // 可行
+else
+  if  // 不可以
+</pre></p></li>
+<li><p>switch表达式中，case语句的缩进与switch一致，无须再次缩进<br/>
+<strong><em>示例8: Switch表达式</em></strong><pre>
+// 可行
+switch (expr)
+{
+case CASE1:
+// The case statement is on the same indentation level
+// with the switch, and it's statements are indented
+// one level.
+break;
+};
+// 不可以
+switch( expr )
+{
+case CASE1:
+// The case statement should be on the same
+// indentation level of the switch statement</p>
+
+<pre><code>break;
+</code></pre>
+
+<p>};
+</pre></p></li>
+<li>所有的名字必须是英文</li>
+<li><p>方法和函数名必须用动词清楚地表达其意图。命名采取大小写混合的方式，首字母是小写。如果方法是给引擎内部使用，而不是外部的通用API，则需要加上前缀"_"。</p></li>
+<li><p>变量必须清晰第表达去包含的信息。命名也采取大小写混合的方式，首字母是小写。私用和受保护的成名变量加上前缀"m",后面更上大写字母。名字可以用缩写，但要保证很容易理解。比较特殊的是循环变量名(比如 for循环),可以用简单的字母变量，比如"i".<br/>
+<strong><em>示例9: 变量命名</em></strong><pre>
+loggingLevel // 最清晰
+logLvl // 可接受，比较清晰
+ll // 不可接受
+for (int i = 0; i &lt; max; ++i) // 可行
+</pre>
+<em>我们可以给这些变量名加上前缀"m"吗？(注:只有成员变量才行)</em></p></li>
+<li><p>每个类应该拥有自己单独的文件，除非跟另外的类关联度非常大或者代码量很小</p></li>
+</ul>
+
+
+<h1>设计指南</h1>
+
+<ul>
+<li><p>应该把初始化放在构造函数里面</p></li>
+<li><p>尽可能多地使用const，包括变量和函数</p></li>
+<li><p>尽量用传引用替代传值</p></li>
+<li><p>调用标准库函数加上"::"前缀</p></li>
+<li><p>强烈推荐使用c++风格，而不是c风格</p></li>
+<li><p>对于STL容器，判断容器是否为空，使用empty()而不是检查size()是否为0</p></li>
+<li><p>对于迭代器变量，使用++var，而不是var++<br/>
+<em>(注:印象中侯杰的stl源码分析中提到过，前置方式要效率高些)</em></p></li>
+<li><p>如果基类中的函数带有virtual，子类中也应该带上</p></li>
+<li><p>基本类型不要用缩写<br/>
+<strong><em>示例10: 类型名</em></strong><pre>
+unsigned int // 可行
+uint // 不可以
+</pre></p></li>
+<li><p>用c++风格的头文件替代c风格<br/>
+<strong><em>示例11: C++风格的头</em></strong><pre>
+#inclue <cstring> // 可行
+#include &lt;string.h> // 不可行
+</pre></p></li>
+<li><p>尽量使用C++标准库和STL函数，而不是C stdlib中的函数<br/>
+<strong><em>示例12: 函数使用</em></strong><pre>
+// 可行
+ifstream fil;
+fil.open("filename.txt");
+fil.close();
+// 不可以
+FILE* fil = fopen("filename.txt", "w");
+fclose(fil);
+</pre></p></li>
+<li><p>类中所有的变量都应该在构造函数中初始化一个合理值。</p></li>
+<li><p>没有必要在删除一个指针的时候做NULL检测，因为在C++中delete NULL是安全的<br/>
+<strong><em>示例13: 删除指针</em></strong><pre>
+// 可行, delete NULL是安全的
+Val* ptrValue = 0;
+delete ptrValue;
+// 不可以，没有必要嘛
+if (ptrValue != NULL)
+  delete ptrValue;
+</pre></p></li>
+<li><p>0比NULL要好<br/>
+<strong><em>示例14: 0更好</em></strong><pre>
+Val<em> ptrValue = 0; // 可行
+Val</em> ptrValue = NULL; // 不可以
+</pre></p></li>
+<li><p>当一个成员指针被删除掉，应该赋0值</p></li>
+</ul>
+
+
+<h1>OGRE特殊指南</h1>
+
+<ul>
+<li>用Ogre::String 取代 std::string或者其他字符串</li>
+</ul>
+
+
+<p><em>(注：初次翻译，不当之处还请指出)</em></p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/" >http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/</a>
+	</div>
+
+	
+		<div class="links">
+		Jul 25, 2012 |
+		Category: <a href="/blog/categories/ogre/">Ogre</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/" st_title="Ogre编码规范"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/" st_title="Ogre编码规范" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/" st_title="Ogre编码规范" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/" st_title="Ogre编码规范" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2012/07/25/ogre-coding-style-guidelines/" st_title="Ogre编码规范"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/coding/">coding</a>,
+			
+			<a href="/blog/tags/style/">style</a>,
+			
+			<a href="/blog/tags/guideline/">guideline</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2012/07/18/ogre-plugin/">Ogre分析之插件机制</a></li>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+		<li><a href="/blog/2012/03/24/lua-wuxia/">Lua在武侠世界中的应用</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2012/07/25/ogre-coding-style-guidelines';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

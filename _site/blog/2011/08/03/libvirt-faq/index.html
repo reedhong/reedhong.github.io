@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>libvirt 错误FAQ - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">libvirt 错误FAQ</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>【Q】:hack 的时候出现编译错误：../src/.libs/libvirt_driver_lxc.a(libvirt_driver_lxc_la-lxc_driver.o): In function <code>lxcSetSchedulerParameters':  
+lxc/lxc_driver.c:2326: undefined reference to</code>virCgroupSetCpuSet'
+【A】: libvirt在这个地方的处理非常奇怪，需要去src/底下，在对应的*.syms添加相应的接口声明</p>
+
+<p>【Q】: hack添加新接口会出现：libvirt.c:1648: warning: no previous prototype for 'virNodeGetStats' [-Wmissing-prototypes]<br/>
+【A】: 在include/libvirt底下， libvirt.h是根据libvirt.h.in生成的，所以，扩展新的接口时，不要忘记往.in里面添加</p>
+
+<p>【Q】: Result status 0, stdout: '' stderr: 'INFO   in start_domain, domain suse existed
+【A】: 配置文件中指定的模板文件存在问题</p>
+
+<p>【Q】：在mount的时候可能会出现：
+mount -o loop /data/domains/lxc5.img /data/domains/lxc5
+mount: could not find any free loop device<br/>
+【A】：这是因为max_loop默认只有8，太小</p>
+
+<p>【Q】：umount: /data/domains/vm4: device is busy<br/>
+【A】：手工杀死:/usr/libexec/libvirt_lxc --name lxc1 --console 13 --background --veth veth8
+类似的文件会导致这个虚拟机引导的init进程和init引导出的其他进程还在系统中。所以，必须kill掉这些进程才行</p>
+
+<p>【Q】: 启动vm或者停止vm的时候，会导致客户端的ssh卡死。<br/>
+【A】: 虚拟机的init启动新的sshd出现的</p>
+
+<p>【Q】： 虚拟机中的/dev/ptx/ptmx 无法删除<br/>
+【A】：
+mount |grep lxc5
+fuser -mu  suse1/
+lsof -w suse1</p>
+
+<p>【Q】： mount -o loop /<strong> /</strong> 提示失败<br/>
+【A】： max_loop 默认最大值为8，需要增加这个默认值的大小</p>
+
+<p>【Q】: 设置cgroup的内存参数的时候可能是失败，报错：<br/>
+【A】：这是由于memory.memsw.limit_in_bytes, memory.limit_in_bytes大小有关联。memory.limit_in_bytes不能大于memory.memsw.limit_in_bytes， memory.memsw.limit_in_bytes不能小于memory.limit_in_bytes。所以，在设置新内存值的时候需要注意设置的顺序。比较新值跟老值之间的关系</p>
+
+<p>【Q】：启动libvirtd报错: initialization failed<br/>
+【A】：字符编码出错 export LC_ALL=POSIX</p>
+
+<p>【Q】：启动虚拟机，日志不断报错：</p>
+
+<pre><code> 13:24:10.986: 28595: error : lxcFdForward:309 : read of fd 7 failed: Input/output error  
+ cpu占有100%， 而且，list 的状态是处于运行中。  
+</code></pre>
+
+<p>【A】</p>
+
+<p>【Q】:在虚拟机中创建设备出错</p>
+
+<pre><code> mknod loop0 b 7 0       
+ mknod: `loop0': Operation not permitted  
+</code></pre>
+
+<p>【A】:需要设置cgroup中设备的值： echo a <em>:</em> rw > devices.allow</p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2011/08/03/libvirt-faq/" >http://xiaohong.me/blog/2011/08/03/libvirt-faq/</a>
+	</div>
+
+	
+		<div class="links">
+		Aug 03, 2011 |
+		Category: <a href="/blog/categories/virtualmachine/">VirtualMachine</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2011/08/03/libvirt-faq/" st_title="libvirt 错误FAQ"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2011/08/03/libvirt-faq/" st_title="libvirt 错误FAQ" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2011/08/03/libvirt-faq/" st_title="libvirt 错误FAQ" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2011/08/03/libvirt-faq/" st_title="libvirt 错误FAQ" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2011/08/03/libvirt-faq/" st_title="libvirt 错误FAQ"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/libvirt/">libvirt</a>,
+			
+			<a href="/blog/tags/faq/">faq</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+		<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/">Ogre编码规范</a></li>
+		
+		<li><a href="/blog/2011/07/29/libvirt-python-api-exten/">libvirt中API的扩展</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2011/08/03/libvirt-faq';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+

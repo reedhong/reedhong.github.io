@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>虚拟机测试框架 - 小洪</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://xiaohong.me/atom.xml" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-2922788-2']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+		</script>
+	</head>
+
+	<body>
+		<div id="header">
+		<a title="小洪" href="/">小洪</a>
+		<p id="description">引刀成一快，不负少年头</p>
+		</div>
+		<div id="header-menu">
+			<ul>
+			<li><a title="Back to Homepage." href="/">Home</a></li>
+			<li><a title="Archives." href="/archives">Archives</a></li>
+			<li><a title="About" href="/projects.html">Projects </a></li>
+			<li><a title="About" href="/about.html">About </a></li>
+			<!--here add your own meyu，use "li" tag-->
+			</ul>
+		</div>	
+		<table id="content">
+			<tr>
+				<!--
+				<td id="sidebar-left">
+					<div class="block">
+					</div>
+				</td> -->
+				<td id="main">
+					<div><h2 class="title">虚拟机测试框架</h2></div>
+
+<div class="node">
+	<div class="content">
+		<p>虚拟机的解决方案各有千秋，在技术选型上，就需要好好进行测试，在这里大致给出一个测试框架出来，希望对大家在技术选型的时候有所帮助</p>
+
+<h1>1. 系统性能测试</h1>
+
+<h2>1.1 综合测试</h2>
+
+<p>采用UnixBench，具体参考http:// code.google.com/p/byte-unixbench/
+是一个系统基准测试工具，不是CPU、RAM或者磁盘基准测试工具。 结果不仅依靠您的硬件，还要依靠您的操作系统，库甚至编译器。主要测试参数如下：<br/>
+Dhrystone<br/>
+该测试用于衡量字符串操作性能，不涉及浮点运算。该测试由Reinhold Weicker在1984年开发，它很大程度上受到软硬件设计、编译器和连接器参数、代码优化、缓存和整型类型的影响。</p>
+
+<p>Whetstone
+该测试用于衡量浮点运算的效率和速度。测试由多个科学计算混合而成，其中的C程序包括sin、cons、sqrt、exp和log，以及整数和浮点数运算、数组操作、条件判断和过程调用，同时测试整数和浮点运算性能。</p>
+
+<p>Execl Throughput
+该测试用于衡量每秒钟调用execl()的次数。execl()是exec函数簇的一部分，它用一个新的进程映像替换当前的进程映像。它和许多其他类似的函数都用作execve()的前端。</p>
+
+<p>File Copy
+该测试用于衡量文件操作性能。它从文件中读取或写入不同大小的buffer，并且测试一定时间内（默认10秒）文件的读写和复制性能。</p>
+
+<p>Pipe Throughput
+该测试用于衡量管道吞吐性能。管道是进程间通信最简单的一种方式，管道吞吐量是一个进程写512bytes到管道并读取出来的次数。管道吞吐量测试并不对应真实的应用。</p>
+
+<p>Pipe-based Context Switching
+该测试用于衡量基于管道的上下文切换性能。两个进程通过一个管道传递一个自增整数，该测试类似一个真实的应用，测试程序创建一个子进程，它们之间通过管道通信。</p>
+
+<p>Process Creation
+该测试用于衡量fork()性能。在一定的时间内，一个进程可以创建并回收子进程的次数。子进程创建涉及内存分配和内存带宽。通常，该基准测试用于比较不同平台下的进程创建性能。</p>
+
+<p>Shell Scripts
+该测试用于衡量脚本运行性能。在一定时间内，一个进程可以创建一组1、2、4、8个并发shell脚本的次数，脚本中包含一组文件操作。</p>
+
+<p>System Call Overhead
+该测试用于衡量系统调用负载性能。测试进入和离开内核态的花销，由一组简单的重复系统调用getpid()构成。</p>
+
+<p>测试完成成后最初会给某个基准值相比，得出一个总的评分。</p>
+
+<h2>1.2 CPU测试</h2>
+
+<p>直接使用time tar jxvf linux-2.6.32.11.tar.bz2，观察整个解包时间</p>
+
+<h2>1.3 IO测试</h2>
+
+<p>1) 采用dd直接读写大文件<br/>
+写：dd if=/dev/zero of=test bs=1M count=4000<br/>
+读：dd of=/dev/zero if=test bs=1M count=4000<br/>
+2) 采用iozone，对文件的各种读写进行全面测试。</p>
+
+<h2>1.4 网络测试</h2>
+
+<p>采用测试工具：netperf。参考：www.netperf.org/netperf/  netperf可测试TCP和UDP吞吐已经应答效率。常用命令如下：
+TCP并发：netperf -H 192.168.254.138 -t TCP_STREAM -l 60<br/>
+UDP并发：netperf -H 192.168.254.138 -t UDP_STREAM -l 60 -- -m 64<br/>
+TCP应答：netperf -H 192.168.254.138 -t TCP_RR -l 60 -- -r 64,1024  <br/>
+UDP应答：netperf -H 192.168.254.138 -t UDP_RR -l 60 -- -r 64,1024</p>
+
+<p>说明：由于我们测试系统是windows下基于VMware的虚拟机，所以，没法直接对比虚拟机的性能。所以，我们做系统测试偏重于测试性能的损耗。也就是在用虚拟机和不用虚拟机的情况下，同样的系统配置，各种性能的偏差是多少。</p>
+
+<h1>2 隔离功能测试</h1>
+
+<p>虚拟机的最大好处在隔离。虽然在同一个物理主机下，但不同虚拟机中的进程相互不会产生影响。</p>
+
+<h2>2.1 内存隔离</h2>
+
+<p>测试方法：写一个内存分配程序，不断地吃掉内存。大致代码如下</p>
+
+<pre class="prettyprint lang-c">
+    char *p = NULL;
+    while(1){
+        p = (char *)malloc(sizeof(char)*BLOCK_SIZE);
+        memset(p, 0, BLOCK_SIZE);
+        sleep(1);
+    }   
+</pre>
+
+
+<p>观察进程是否挂掉。</p>
+
+<h2>2.2 CPU隔离</h2>
+
+<p>测试方法：写一个死循环程序，放在VPS里面。观察CPU占用情况。</p>
+
+<h2>2.3 DISK隔离</h2>
+
+<p>测试方法：dd一个超出大小的文件，观察是否报错</p>
+
+<h1>3 隔离性能测试</h1>
+
+<p>主要采取的方法：在同一物理主机上部署N台虚拟主机，然后在其中一台做不同的压力测试(),观察是否其他虚拟主机有影响。为了能够对影响程度有一个量化。我们可以具体在每台虚拟机上跑以一个应用程序，观察应用程序性能变化。<br/>
+参考论文：<a href="http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf" title="http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf">http://people.clarkson.edu/~jmatthew/publications/isolation_ExpCS_FINALSUBMISSION.pdf</a></p>
+
+		<br/>--EOF--<br/><br/>
+		本文来源于 <a href="http://xiaohong.me/">XiaoHong (http://xiaohong.me/)</a>, 转载请注明.</br>
+		原文地址：<a href="http://xiaohong.me/blog/2011/03/17/vm-test-framework/" >http://xiaohong.me/blog/2011/03/17/vm-test-framework/</a>
+	</div>
+
+	
+		<div class="links">
+		Mar 17, 2011 |
+		Category: <a href="/blog/categories/virtualmachine/">VirtualMachine</a> |
+
+		
+
+		
+		<span  class='st_twitter' st_url="http://xiaohong.me/blog/2011/03/17/vm-test-framework/" st_title="虚拟机测试框架"></span><span  class='st_facebook' st_url="http://xiaohong.me/blog/2011/03/17/vm-test-framework/" st_title="虚拟机测试框架" ></span><span  class='st_gbuzz' st_url="http://xiaohong.me/blog/2011/03/17/vm-test-framework/" st_title="虚拟机测试框架" ></span><span  class='st_sina' st_url="http://xiaohong.me/blog/2011/03/17/vm-test-framework/" st_title="虚拟机测试框架" ></span><span  class='st_plusone' st_url="http://xiaohong.me/blog/2011/03/17/vm-test-framework/" st_title="虚拟机测试框架"></span>
+
+		<div class="tags">
+			Tags:
+			
+			<a href="/blog/tags/lxc/">lxc</a>,
+			
+			<a href="/blog/tags/vm/">vm</a>,
+			
+			<a href="/blog/tags/performance/">performance</a>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<hr style="border-width: 0pt 0pt 1px;" />
+<h3>Related posts</h3>
+<div class="node">
+	<ul>
+		
+		<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/">Ogre编码规范</a></li>
+		
+		<li><a href="/blog/2011/07/29/lxc-memory-cpu/">libvirt中CPU和内存的细粒度管理机制</a></li>
+		
+		<li><a href="/blog/2012/07/18/ogre-plugin/">Ogre分析之插件机制</a></li>
+		
+	</ul>
+</div>
+
+<div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到人人网" class="bshare-renren" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到豆瓣" class="bshare-douban" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=ce681068-832d-43ff-89b1-59dc56306110&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+<hr style="border-width: 0pt 0pt 1px;" />
+
+<div id="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+		var disqus_shortname = 'reedhong';
+		var disqus_identifier = '/blog/2011/03/17/vm-test-framework';
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://reedhong.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		 })();
+	 </script>
+	 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+ </div>
+
+
+
+
+				</td>
+				<td id="sidebar-right">
+					<div class="block">
+						<h2 class="title">Recent</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/2012/07/31/3d-model/" title="一些3D模型格式介绍">一些3D模型格式介绍</a></li>
+									
+									<li><a href="/blog/2012/07/28/opengl-vertex-primitive-fragment-pixel/" title="OpenGL中的顶点，图元，片段和像素">OpenGL中的顶点，图元，片段和像素</a></li>
+									
+									<li><a href="/blog/2012/07/25/ogre-coding-style-guidelines/" title="Ogre编码规范">Ogre编码规范</a></li>
+									
+									<li><a href="/blog/2012/07/18/ogre-plugin/" title="Ogre分析之插件机制">Ogre分析之插件机制</a></li>
+									
+									<li><a href="/blog/2012/07/14/opengl-va-vbo/" title="OpenGL中的VA和VBO">OpenGL中的VA和VBO</a></li>
+									
+									<li><a href="/blog/2012/07/14/open-vertex/" title="OpenGL中的顶点">OpenGL中的顶点</a></li>
+									
+									<li><a href="/blog/2012/07/06/opengl-windows/" title="在Windows下开发OpenGL程序">在Windows下开发OpenGL程序</a></li>
+									
+									<li><a href="/blog/2012/03/24/lua-wuxia/" title="Lua在武侠世界中的应用">Lua在武侠世界中的应用</a></li>
+									
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Categories</h2>
+						<div class="content">
+							<div class="item-list">
+								<ul>
+									
+									<li><a href="/blog/categories/virtualmachine/">VirtualMachine</a></li>
+									
+									<li><a href="/blog/categories/web/">Web</a></li>
+									
+									<li><a href="/blog/categories/language/">Language</a></li>
+									
+									<li><a href="/blog/categories/source/">Source</a></li>
+									
+									<li><a href="/blog/categories/opengl/">OpenGL</a></li>
+									
+									<li><a href="/blog/categories/ogre/">Ogre</a></li>
+									
+									<li><a href="/blog/categories/game/">Game</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Tags</h2>
+						<div class="content">
+							<div class="item-list tag-cloud">
+								<ul>
+									
+									<li><a href="/blog/tags/lxc/" name="lxc">lxc</a></li>
+									
+									<li><a href="/blog/tags/虚拟化/" name="虚拟化">虚拟化</a></li>
+									
+									<li><a href="/blog/tags/vm/" name="vm">vm</a></li>
+									
+									<li><a href="/blog/tags/performance/" name="performance">performance</a></li>
+									
+									<li><a href="/blog/tags/discuz/" name="discuz">discuz</a></li>
+									
+									<li><a href="/blog/tags/encode/" name="encode">encode</a></li>
+									
+									<li><a href="/blog/tags/python/" name="python">python</a></li>
+									
+									<li><a href="/blog/tags/libvirt/" name="libvirt">libvirt</a></li>
+									
+									<li><a href="/blog/tags/manage/" name="manage">manage</a></li>
+									
+									<li><a href="/blog/tags/hooks/" name="hooks">hooks</a></li>
+									
+									<li><a href="/blog/tags/faq/" name="faq">faq</a></li>
+									
+									<li><a href="/blog/tags/lua/" name="lua">lua</a></li>
+									
+									<li><a href="/blog/tags/武侠世界/" name="武侠世界">武侠世界</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">opengl</a></li>
+									
+									<li><a href="/blog/tags/windows/" name="windows">windows</a></li>
+									
+									<li><a href="/blog/tags/opengl/" name="opengl">OpenGL</a></li>
+									
+									<li><a href="/blog/tags/vertex/" name="vertex">Vertex</a></li>
+									
+									<li><a href="/blog/tags/va/" name="va">va</a></li>
+									
+									<li><a href="/blog/tags/vbo/" name="vbo">vbo</a></li>
+									
+									<li><a href="/blog/tags/ogre/" name="ogre">ogre</a></li>
+									
+									<li><a href="/blog/tags/plugin/" name="plugin">plugin</a></li>
+									
+									<li><a href="/blog/tags/source/" name="source">source</a></li>
+									
+									<li><a href="/blog/tags/coding/" name="coding">coding</a></li>
+									
+									<li><a href="/blog/tags/style/" name="style">style</a></li>
+									
+									<li><a href="/blog/tags/guideline/" name="guideline">guideline</a></li>
+									
+									<li><a href="/blog/tags/model/" name="model">model</a></li>
+									
+									<li><a href="/blog/tags/3d/" name="3d">3D</a></li>
+									
+									<li><a href="/blog/tags/introduction/" name="introduction">introduction</a></li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Subscribe</h2>
+						<div class="content">
+							<a href="http://xiaohong.me/atom.xml" rel="alternate" type="application/rss+xml" class="rss-feed">RSS Feed</a>
+						</div>
+					</div>
+
+					<div class="block">
+						<h2 class="title">Contact</h2>
+						<div class="content">
+                            <img src="/images/gmail.png" />						
+						</div>
+					</div>
+
+					<div id="footer">
+						<hr style="border-width: 0pt 0pt 1px;" />
+
+						本站内容未做特别说明者均使用<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创作共用协议</a>
+						<br />
+						Hosted by <a href="http://github.com">GitHub</a> and powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	</body>
+</html>
+
+
